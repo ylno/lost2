@@ -46,14 +46,17 @@ export default function Chat({}) {
       if (participant) {
         const user = getUser(participant.id);
         if (user) {
-          return [<Avatar src={user.avatar} />, user.username];
+          return [
+            <Avatar src={user.avatar} key={`avatar-${user.id}`} />,
+            user.username,
+          ];
         }
       }
     }
     return [undefined, undefined];
   }, [activeConversation]);
 
-  const handleSend = (text) => {
+  const handleSend = (text: string) => {
     console.log("send", text);
 
     // Logger user (sender)
@@ -61,13 +64,16 @@ export default function Chat({}) {
 
     const message = new ChatMessage({
       id: nanoid(),
-      content: text,
+      content: text as any,
       contentType: MessageContentType.TextHtml,
       senderId: currentUserId,
       direction: MessageDirection.Outgoing,
       status: MessageStatus.Sent,
     });
 
+    if (!activeConversation) {
+      throw new Error("no conversation");
+    }
     sendMessage({
       message,
       conversationId: activeConversation.id,
@@ -88,7 +94,10 @@ export default function Chat({}) {
                 if (participant) {
                   const user = getUser(participant.id);
                   if (user) {
-                    return [<Avatar src={user.avatar} />, user.username];
+                    return [
+                      <Avatar src={user.avatar} key={`avatar-${user.id}`} />,
+                      user.username,
+                    ];
                   }
                 }
 

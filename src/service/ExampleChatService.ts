@@ -85,7 +85,7 @@ export class ExampleChatService implements IChatService {
             detail.message as ChatMessage<MessageContentType.TextHtml>;
 
           message.direction = MessageDirection.Incoming;
-          const { conversationId } = detail;
+          const { conversationId } = detail as { conversationId: string };
           if (this.eventHandlers.onMessage && detail.sender !== this) {
             // Running the onMessage callback registered by ChatProvider will cause:
             // 1. Add a message to the conversation to which the message was sent
@@ -103,6 +103,7 @@ export class ExampleChatService implements IChatService {
             // After adding a conversation to the list, you don't need to manually run updateState
             // because ChatProvider in onMessage will do it.
             this.eventHandlers.onMessage(
+              // @ts-ignore
               new MessageEvent({ message, conversationId }),
             );
           }

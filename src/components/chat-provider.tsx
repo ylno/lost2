@@ -7,6 +7,7 @@ import {
   ChatProvider,
   Conversation,
   ConversationRole,
+  IStorage,
   MessageContentType,
   MessageDirection,
   MessageStatus,
@@ -14,6 +15,7 @@ import {
   Presence,
   TextContent,
   TypingUsersList,
+  UpdateState,
   User,
   UserStatus,
 } from "@chatscope/use-chat";
@@ -27,7 +29,7 @@ const messageIdGenerator = () => nanoid();
 const groupIdGenerator = () => nanoid();
 
 // Create serviceFactory
-const serviceFactory = (storage, updateState) => {
+const serviceFactory = (storage: IStorage, updateState: UpdateState) => {
   return new ExampleChatService(storage, updateState);
 };
 
