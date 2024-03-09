@@ -1,6 +1,6 @@
 // This IChatService implementation is only an example and has no real business value.
 // However, this is good start point to make your own implementation.
-// Using this service it's possible to connects two or more chats in the same application for a demonstration purposes
+// Using this service it's possible to connects two or more chats in the same application for a demonstration purposes.
 
 import {
   ChatEvent,
