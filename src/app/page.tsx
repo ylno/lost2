@@ -1,4 +1,4 @@
-import MyChatProvider from "@/components/chat-provider";
+import GCChatProvider from "@/components/chat-provider";
 
 export default function Home() {
   return (
@@ -10,7 +10,7 @@ export default function Home() {
         width: "100%",
       }}
     >
-      <MyChatProvider></MyChatProvider>
+      <GCChatProvider></GCChatProvider>
     </div>
   );
 }

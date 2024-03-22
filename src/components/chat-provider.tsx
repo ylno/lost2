@@ -22,7 +22,7 @@ import {
 import Chat from "./chat";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-import { ExampleChatService } from "@/service/ExampleChatService";
+import { ExampleChatService } from "@/services/ExampleChatService";
 
 // Storage needs to generate id for messages and groups
 const messageIdGenerator = () => nanoid();
@@ -108,7 +108,7 @@ chatStorage.addMessage(
 
 chatStorage.setActiveConversation(conversation.id);
 
-export default function MyChatProvider() {
+export default function GCChatProvider() {
   const [isWindowDefined, setIsWindowDefined] = useState(false);
   useEffect(() => {
     console.log("init", serviceFactory, window);
