@@ -79,6 +79,8 @@ export default function Chat({}) {
       conversationId: activeConversation.id,
       senderId: currentUserId,
     });
+
+    console.log("messages", currentMessages);
   };
 
   return (

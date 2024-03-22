@@ -30,6 +30,7 @@ const groupIdGenerator = () => nanoid();
 
 // Create serviceFactory
 const serviceFactory = (storage: IStorage, updateState: UpdateState) => {
+  console.log("servicefactory");
   return new ExampleChatService(storage, updateState);
 };
 
@@ -107,6 +108,8 @@ chatStorage.addMessage(
 );
 
 chatStorage.setActiveConversation(conversation.id);
+
+console.log("storage", chatStorage);
 
 export default function GCChatProvider() {
   const [isWindowDefined, setIsWindowDefined] = useState(false);
