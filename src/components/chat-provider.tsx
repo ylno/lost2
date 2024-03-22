@@ -91,7 +91,7 @@ const conversation = new Conversation({
   ],
   unreadCounter: 0,
   typingUsers: new TypingUsersList({ items: [] }),
-  draft: "sdfsfdf",
+  draft: "",
 });
 chatStorage.addConversation(conversation);
 chatStorage.addMessage(
