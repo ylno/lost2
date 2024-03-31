@@ -1,16 +1,22 @@
-import GCChatProvider from "@/components/chat-provider";
+"use client";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Home() {
+  const [code, setCode] = useState("");
+
+  async function sendCode() {
+    console.log("Sending code", code);
+    await axios.post("api/start", { code: code });
+  }
+
   return (
-    <div
-      style={{
-        display: "block",
-        position: "relative",
-        height: "100dvh",
-        width: "100%",
-      }}
-    >
-      <GCChatProvider></GCChatProvider>
+    <div>
+      Enter start code or your already started session code
+      <div>
+        <input onChange={(e) => setCode(e.target.value)} />
+        <button onClick={sendCode}>send</button>
+      </div>
     </div>
   );
 }

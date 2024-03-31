@@ -86,6 +86,7 @@ export class ExampleChatService implements IChatService {
 
           message.direction = MessageDirection.Incoming;
           const { conversationId } = detail as { conversationId: string };
+          console.log("sender", detail.sender);
           if (this.eventHandlers.onMessage && detail.sender !== this) {
             // Running the onMessage callback registered by ChatProvider will cause:
             // 1. Add a message to the conversation to which the message was sent
