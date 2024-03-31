@@ -13,7 +13,7 @@ export default async function handler(
 ) {
   const { code } = req.body as StartData;
 
-  console.log("server function, submitted code", code);
+  console.log("server function, submitted code:", code);
 
   if (code === START_CODE) {
     await apiService.startSession();
