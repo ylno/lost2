@@ -7,7 +7,8 @@ export default function Home() {
 
   async function sendCode() {
     console.log("Sending code", code);
-    await axios.post("api/start", { code: code });
+    const axiosResponse = await axios.post("api/start", { code: code });
+    console.log("r", axiosResponse.data);
   }
 
   return (

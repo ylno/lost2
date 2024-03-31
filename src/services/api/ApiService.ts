@@ -1,5 +1,6 @@
 import { firestore } from "@/lib/FirebaseAdmin";
 import { assign, createActor, createMachine, StateMachine } from "xstate";
+import { CacheSession } from "@/types/types";
 
 export class ApiService {
   stateMachine: any;
@@ -27,14 +28,6 @@ export class ApiService {
       },
     });
   }
-  async getText() {
-    await firestore
-      .collection("cache-sessions")
-      .doc()
-      .set({ key1: "test1", created: new Date() });
-
-    return "text from api";
-  }
 
   async startSession() {
     const countActor = createActor(this.stateMachine).start();
@@ -50,16 +43,15 @@ export class ApiService {
     // countActor.send({ type: "SET", value: 10 });
     // // logs 10
 
-    await firestore
-      .collection("cache-sessions")
-      .doc()
-      .set({
-        created: new Date(),
-        state: JSON.stringify(countActor.getPersistedSnapshot()),
-        chatConversation: [],
-      });
+    const documentReference = firestore.collection("cache-sessions").doc();
+    await documentReference.set({
+      created: new Date(),
+      state: JSON.stringify(countActor.getPersistedSnapshot()),
+      chatConversation: [],
+    });
 
     console.log(JSON.stringify(countActor.getPersistedSnapshot()));
+    return (await documentReference.get()).data() as CacheSession;
   }
 }
 

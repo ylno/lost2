@@ -13,14 +13,16 @@ export default async function handler(
 ) {
   const { code } = req.body as StartData;
 
-  console.log("server function, submitted code", code);
+  console.log("server function, submitted code:", code);
 
   if (code === START_CODE) {
-    await apiService.startSession();
+    const cacheSession = await apiService.startSession();
+    console.log("cacheSession", cacheSession);
+    return res.status(200).json(cacheSession);
   } else {
     //todo get a new session here
     console.log("not implemented yet");
   }
 
-  res.status(200).json({ text: await apiService.getText() });
+  res.status(200).json({});
 }
