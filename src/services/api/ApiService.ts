@@ -51,7 +51,10 @@ export class ApiService {
     });
 
     console.log(JSON.stringify(countActor.getPersistedSnapshot()));
-    return (await documentReference.get()).data() as CacheSession;
+    return {
+      ...(await documentReference.get()).data(),
+      id: documentReference.id,
+    } as CacheSession;
   }
 }
 

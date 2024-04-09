@@ -1,14 +1,18 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
+import { frontendService } from "@/lib/FrontendService";
+import { router } from "next/client";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const [code, setCode] = useState("");
 
   async function sendCode() {
-    console.log("Sending code", code);
-    const axiosResponse = await axios.post("api/start", { code: code });
-    console.log("r", axiosResponse.data);
+    const cacheSession = await frontendService.startCacheSession(code);
+    if (cacheSession) {
+      router.push("/chat");
+    }
   }
 
   return (

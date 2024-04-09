@@ -24,5 +24,5 @@ export default async function handler(
     console.log("not implemented yet");
   }
 
-  res.status(200).json({});
+  res.status(404).json({});
 }
