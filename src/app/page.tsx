@@ -1,18 +1,31 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { frontendService } from "@/lib/FrontendService";
-import { router } from "next/client";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
   const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const sessionId = localStorage.getItem("cacheSession");
+    if (sessionId) {
+      router.push("/chat");
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   async function sendCode() {
     const cacheSession = await frontendService.startCacheSession(code);
     if (cacheSession) {
       router.push("/chat");
     }
+  }
+
+  if (loading) {
+    return <div>loading...</div>;
   }
 
   return (
