@@ -1,4 +1,4 @@
-import { firestore } from "@/lib/FirebaseAdmin";
+import { firestore } from "@/lib/backend/FirebaseAdmin";
 import { assign, createActor, createMachine, StateMachine } from "xstate";
 import { CacheSession } from "@/types/types";
 
@@ -30,6 +30,10 @@ export class ApiService {
   }
 
   async getSession(id: string) {
+    if (!id) {
+      console.error("empty id", id);
+      throw new Error("empty id");
+    }
     const documentReference = firestore.collection("cache-sessions").doc(id);
     return (await documentReference.get()).data() as CacheSession;
   }

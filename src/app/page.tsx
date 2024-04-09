@@ -1,12 +1,26 @@
 "use client";
 import { useEffect, useState } from "react";
-import { frontendService } from "@/lib/FrontendService";
 import { useRouter } from "next/navigation";
+import { frontendService } from "@/lib/frontend/FrontendService";
 
 export default function Home() {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(true);
+
+  async function checkSession() {
+    const sessionId = localStorage.getItem("cacheSession");
+    console.log("sessionid from loacalstorage", sessionId);
+    if (!sessionId) {
+      throw new Error("no_session");
+    }
+    const cacheSession = await frontendService.startCacheSession(sessionId);
+    if (cacheSession) {
+      return cacheSession;
+    } else {
+      throw new Error("no_session");
+    }
+  }
 
   useEffect(() => {
     const sessionId = localStorage.getItem("cacheSession");
@@ -15,11 +29,7 @@ export default function Home() {
       code: code,
     });
 
-    Promise.all([
-      Promise.resolve(code != ""),
-      Promise.resolve(sessionId),
-      frontendService.startCacheSession(code),
-    ])
+    checkSession()
       .then(() => {
         router.push("/chat");
       })
