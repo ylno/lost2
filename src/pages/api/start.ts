@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { apiService } from "@/services/api/ApiService";
 
-const START_CODE = "start";
+const START_CODE = process.env.START_CODE;
 
 type StartData = {
   code: string;
@@ -15,7 +15,7 @@ export default async function handler(
 
   console.log("server function, submitted code:", code);
 
-  if (code === START_CODE) {
+  if (START_CODE && code === START_CODE) {
     const cacheSession = await apiService.startSession();
     console.log("cacheSession created", cacheSession);
     return res.status(200).json(cacheSession);
