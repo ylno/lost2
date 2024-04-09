@@ -10,11 +10,22 @@ export default function Home() {
 
   useEffect(() => {
     const sessionId = localStorage.getItem("cacheSession");
-    if (sessionId) {
-      router.push("/chat");
-    } else {
-      setLoading(false);
-    }
+    console.log("sessionid from loacalstorage", {
+      sessionId: sessionId,
+      code: code,
+    });
+
+    Promise.all([
+      Promise.resolve(code != ""),
+      Promise.resolve(sessionId),
+      frontendService.startCacheSession(code),
+    ])
+      .then(() => {
+        router.push("/chat");
+      })
+      .catch((error) => {
+        setLoading(false);
+      });
   }, []);
 
   async function sendCode() {

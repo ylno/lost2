@@ -17,11 +17,16 @@ export default async function handler(
 
   if (code === START_CODE) {
     const cacheSession = await apiService.startSession();
-    console.log("cacheSession", cacheSession);
+    console.log("cacheSession created", cacheSession);
     return res.status(200).json(cacheSession);
   } else {
-    //todo get a new session here
-    console.log("not implemented yet");
+    const cacheSession = await apiService.getSession(code);
+    console.log("cacheSession loaded", cacheSession);
+    if (cacheSession) {
+      return res.status(200).json(cacheSession);
+    } else {
+      return res.status(404).send("no such session");
+    }
   }
 
   res.status(404).json({});

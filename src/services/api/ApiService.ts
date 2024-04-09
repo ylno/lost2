@@ -29,6 +29,11 @@ export class ApiService {
     });
   }
 
+  async getSession(id: string) {
+    const documentReference = firestore.collection("cache-sessions").doc(id);
+    return (await documentReference.get()).data() as CacheSession;
+  }
+
   async startSession() {
     const countActor = createActor(this.stateMachine).start();
 
