@@ -1,3 +1,4 @@
+"use client";
 import GCChatProvider from "@/components/chat-provider";
 
 export default function ChatPage() {

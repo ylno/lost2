@@ -13,6 +13,10 @@ class FrontendService {
     console.log("response", startResponse);
     return startResponse;
   }
+
+  getCachesession() {
+    return localStorage.getItem("cacheSession");
+  }
 }
 
 export const frontendService = new FrontendService();

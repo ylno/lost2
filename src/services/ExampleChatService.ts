@@ -16,6 +16,10 @@ import {
   UpdateState,
   UserTypingEvent,
 } from "@chatscope/use-chat";
+import { firestoreDb } from "@/lib/frontend/Firebase";
+import { doc, getDoc, setDoc } from "@firebase/firestore/lite";
+import { collection, getDocs } from "firebase/firestore/lite";
+import { frontendService } from "@/lib/frontend/FrontendService";
 
 type EventHandlers = {
   onMessage: ChatEventHandler<
@@ -62,6 +66,20 @@ export class ExampleChatService implements IChatService {
     this.storage = storage;
     this.updateState = update;
 
+    try {
+      const cachesession = frontendService.getCachesession();
+      const collectionReference = collection(
+        firestoreDb,
+        `/cache-sessions/${cachesession}/chat`,
+      );
+      getDocs(collectionReference).then((snapshot) => {
+        snapshot.docs.map((doc) => {
+          console.log(doc.data());
+        });
+      });
+    } catch (e) {
+      console.log("error", e);
+    }
     // For communication we use CustomEvent dispatched to the window object.
     // It allows you to simulate sending and receiving data from the server.
     // In a real application, instead of adding a listener to the window,

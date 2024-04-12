@@ -1,6 +1,7 @@
 import { firestore } from "@/lib/backend/FirebaseAdmin";
 import { assign, createActor, createMachine, StateMachine } from "xstate";
 import { CacheSession } from "@/types/types";
+import { doc } from "@firebase/firestore/lite";
 
 export class ApiService {
   stateMachine: any;
@@ -52,18 +53,25 @@ export class ApiService {
     // countActor.send({ type: "SET", value: 10 });
     // // logs 10
 
-    const documentReference = firestore.collection("cache-sessions").doc();
-    await documentReference.set({
-      created: new Date(),
-      state: JSON.stringify(countActor.getPersistedSnapshot()),
-      chatConversation: [],
-    });
+    try {
+      const sessionCollectionReference = firestore.collection("cache-sessions");
+      const documentReference = sessionCollectionReference.doc();
+      await documentReference.set({
+        created: new Date(),
+        state: JSON.stringify(countActor.getPersistedSnapshot()),
+        chatConversation: [],
+      });
+      const chatDocument = documentReference.collection("chat").doc();
+      await chatDocument.set({ sender: "Tim" });
 
-    console.log(JSON.stringify(countActor.getPersistedSnapshot()));
-    return {
-      ...(await documentReference.get()).data(),
-      id: documentReference.id,
-    } as CacheSession;
+      console.log(JSON.stringify(countActor.getPersistedSnapshot()));
+      return {
+        ...(await documentReference.get()).data(),
+        id: documentReference.id,
+      } as CacheSession;
+    } catch (e) {
+      console.log("git an error", e);
+    }
   }
 }
 
