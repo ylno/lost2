@@ -104,18 +104,6 @@ const conversation = new Conversation({
   draft: "",
 });
 chatStorage.addConversation(conversation);
-chatStorage.addMessage(
-  new ChatMessage({
-    id: nanoid(),
-    direction: MessageDirection.Incoming,
-    status: MessageStatus.Sent,
-    senderId: "Tim",
-    contentType: MessageContentType.TextHtml,
-    content: "hallo Mate" as any,
-  }),
-  conversation.id,
-);
-
 chatStorage.setActiveConversation(conversation.id);
 
 console.log("storage", chatStorage);

@@ -18,7 +18,6 @@ import {
   UserTypingEvent,
 } from "@chatscope/use-chat";
 import { firestoreDb } from "@/lib/frontend/Firebase";
-import { doc, getDoc, setDoc } from "@firebase/firestore/lite";
 import { collection, getDocs } from "firebase/firestore/lite";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { nanoid } from "nanoid";
@@ -86,7 +85,10 @@ export class GeocachingChatService implements IChatService {
           this.storage?.addMessage(
             new ChatMessage({
               id: nanoid(),
-              direction: MessageDirection.Incoming,
+              direction:
+                storedChatMessage.sender == "You"
+                  ? MessageDirection.Outgoing
+                  : MessageDirection.Incoming,
               status: MessageStatus.Sent,
               senderId: storedChatMessage.sender,
               contentType: MessageContentType.TextHtml,
