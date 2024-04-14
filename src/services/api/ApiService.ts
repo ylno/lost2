@@ -62,7 +62,11 @@ export class ApiService {
         chatConversation: [],
       });
       const chatDocument = documentReference.collection("chat").doc();
-      await chatDocument.set({ sender: "Tim" });
+      await chatDocument.set({
+        sender: "Tim",
+        message: "Hallo Freund",
+        created: new Date(),
+      });
 
       console.log(JSON.stringify(countActor.getPersistedSnapshot()));
       return {

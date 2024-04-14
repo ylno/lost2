@@ -11,6 +11,7 @@ import {
   IStorage,
   MessageContentType,
   MessageDirection,
+  MessageStatus,
   SendMessageServiceParams,
   SendTypingServiceParams,
   UpdateState,
@@ -20,6 +21,8 @@ import { firestoreDb } from "@/lib/frontend/Firebase";
 import { doc, getDoc, setDoc } from "@firebase/firestore/lite";
 import { collection, getDocs } from "firebase/firestore/lite";
 import { frontendService } from "@/lib/frontend/FrontendService";
+import { nanoid } from "nanoid";
+import { StoredChatMessage } from "@/types/types";
 
 type EventHandlers = {
   onMessage: ChatEventHandler<
@@ -49,7 +52,7 @@ type EventHandlers = {
   [key: string]: any;
 };
 
-export class ExampleChatService implements IChatService {
+export class GeocachingChatService implements IChatService {
   storage?: IStorage;
   updateState: UpdateState;
 
@@ -68,6 +71,10 @@ export class ExampleChatService implements IChatService {
 
     try {
       const cachesession = frontendService.getCachesession();
+      const conversationId = cachesession;
+      if (!cachesession) {
+        throw new Error("no cachesession");
+      }
       const collectionReference = collection(
         firestoreDb,
         `/cache-sessions/${cachesession}/chat`,
@@ -75,6 +82,34 @@ export class ExampleChatService implements IChatService {
       getDocs(collectionReference).then((snapshot) => {
         snapshot.docs.map((doc) => {
           console.log(doc.data());
+          const storedChatMessage = doc.data() as StoredChatMessage;
+          this.storage?.addMessage(
+            new ChatMessage({
+              id: nanoid(),
+              direction: MessageDirection.Incoming,
+              status: MessageStatus.Sent,
+              senderId: storedChatMessage.sender,
+              contentType: MessageContentType.TextHtml,
+              content: storedChatMessage.message as any,
+            }),
+            cachesession,
+            false,
+          );
+          this.updateState();
+
+          // const message1 = new ChatMessage({
+          //   id: nanoid(),
+          //   direction: MessageDirection.Incoming,
+          //   status: MessageStatus.Sent,
+          //   senderId: storedChatMessage.sender,
+          //   contentType: MessageContentType.TextHtml,
+          //   content: storedChatMessage.message as any,
+          // });
+          // console.log("message111", message1);
+          // this.eventHandlers.onMessage(
+          //   // @ts-ignore
+          //   new MessageEvent({ message: message1, conversationId }),
+          // );
         });
       });
     } catch (e) {

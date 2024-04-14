@@ -6,3 +6,9 @@ export type CacheSession = {
   state: any;
   created: Timestamp;
 };
+
+export type StoredChatMessage = {
+  sender: string;
+  created: Timestamp;
+  message: string;
+};

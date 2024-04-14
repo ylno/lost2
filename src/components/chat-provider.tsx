@@ -22,16 +22,25 @@ import {
 import Chat from "./chat";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-import { ExampleChatService } from "@/services/ExampleChatService";
+import { GeocachingChatService } from "@/services/GeocachingChatService";
+import { frontendService } from "@/lib/frontend/FrontendService";
+import { collection, getDocs } from "firebase/firestore/lite";
+import { firestoreDb } from "@/lib/frontend/Firebase";
+import { StoredChatMessage } from "@/types/types";
+import { sendMessage } from "next/dist/client/dev/error-overlay/websocket";
 
 // Storage needs to generate id for messages and groups
 const messageIdGenerator = () => nanoid();
 const groupIdGenerator = () => nanoid();
+const cachesession = frontendService.getCachesession();
+if (!cachesession) {
+  throw new Error("no_cache_session");
+}
 
 // Create serviceFactory
 const serviceFactory = (storage: IStorage, updateState: UpdateState) => {
   console.log("servicefactory");
-  return new ExampleChatService(storage, updateState);
+  return new GeocachingChatService(storage, updateState);
 };
 
 const timUser = {
@@ -69,8 +78,8 @@ chatStorage.addUser(
   new User({
     id: "You",
     presence: new Presence({ status: UserStatus.Available, description: "" }),
-    firstName: "asdas",
-    lastName: "adsasd",
+    firstName: "Geo",
+    lastName: "Cacher",
     username: "You",
     email: "",
     avatar: tim.avatar,
@@ -79,7 +88,7 @@ chatStorage.addUser(
 );
 
 const conversation = new Conversation({
-  id: nanoid(),
+  id: cachesession,
   participants: [
     new Participant({
       id: "Tim",
