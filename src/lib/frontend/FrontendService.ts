@@ -1,3 +1,4 @@
+"use client";
 import { CacheSession } from "@/types/types";
 import axios from "axios";
 
@@ -15,7 +16,15 @@ class FrontendService {
   }
 
   getCachesession() {
-    return localStorage.getItem("cacheSession");
+    return localStorage?.getItem("cacheSession");
+  }
+
+  async sendChatMessage(message: string) {
+    console.log("send chat message");
+    const axiosResponse = await axios.post("api/chat", {
+      sessionid: this.getCachesession(),
+      message: message,
+    });
   }
 }
 

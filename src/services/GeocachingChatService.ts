@@ -22,6 +22,7 @@ import { collection, getDocs } from "firebase/firestore/lite";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { nanoid } from "nanoid";
 import { StoredChatMessage } from "@/types/types";
+import { onSnapshot } from "@firebase/firestore";
 
 type EventHandlers = {
   onMessage: ChatEventHandler<
@@ -67,6 +68,7 @@ export class GeocachingChatService implements IChatService {
   constructor(storage: IStorage, update: UpdateState) {
     this.storage = storage;
     this.updateState = update;
+    console.log("GeocachingChatService", this.storage, this.updateState);
 
     try {
       const cachesession = frontendService.getCachesession();
@@ -112,6 +114,15 @@ export class GeocachingChatService implements IChatService {
           //   // @ts-ignore
           //   new MessageEvent({ message: message1, conversationId }),
           // );
+        });
+      });
+
+      onSnapshot(collectionReference, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          console.log("changetype", change.type);
+          if (change.type === "added") {
+            console.log("Neues Dokument: ", change.doc.data());
+          }
         });
       });
     } catch (e) {
@@ -190,16 +201,21 @@ export class GeocachingChatService implements IChatService {
     // They are received in the callback assigned in the constructor.
     // In a real application, instead of dispatching the event here,
     // you will implement sending messages to your chat server.
-    const messageEvent = new CustomEvent("chat-protocol", {
-      detail: {
-        type: "message",
-        message,
-        conversationId,
-        sender: this,
-      },
-    });
+    const stringMessage = message.content as unknown as string;
+    console.log("message", stringMessage);
 
-    window.dispatchEvent(messageEvent);
+    frontendService.sendChatMessage(stringMessage);
+    // console.log("send");
+    // const messageEvent = new CustomEvent("chat-protocol", {
+    //   detail: {
+    //     type: "message",
+    //     message,
+    //     conversationId,
+    //     sender: this,
+    //   },
+    // });
+    //
+    // window.dispatchEvent(messageEvent);
 
     return message;
   }

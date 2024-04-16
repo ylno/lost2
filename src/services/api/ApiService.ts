@@ -77,6 +77,24 @@ export class ApiService {
       console.log("git an error", e);
     }
   }
+
+  async storeChatMessage(chatsession: string, message: string) {
+    try {
+      const sessionCollectionReference = firestore.collection("cache-sessions");
+      //check if exists
+      const sessionDocumentReference =
+        sessionCollectionReference.doc(chatsession);
+      const documentSnapshot = await sessionDocumentReference.get();
+      if (!documentSnapshot.exists) {
+        throw new Error("chat does not exist");
+      }
+      await sessionDocumentReference.collection("chat").doc().set({
+        sender: "You",
+        message: message,
+        created: new Date(),
+      });
+    } catch (e) {}
+  }
 }
 
 export const apiService = new ApiService();
