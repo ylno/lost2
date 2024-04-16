@@ -1,7 +1,6 @@
 import { firestore } from "@/lib/backend/FirebaseAdmin";
 import { assign, createActor, createMachine, StateMachine } from "xstate";
 import { CacheSession } from "@/types/types";
-import { doc } from "@firebase/firestore/lite";
 
 export class ApiService {
   stateMachine: any;
@@ -78,12 +77,13 @@ export class ApiService {
     }
   }
 
-  async storeChatMessage(chatsession: string, message: string) {
+  async storeChatMessage(sessionid: string, message: string) {
     try {
+      console.log("storeChatMessage", sessionid, message);
       const sessionCollectionReference = firestore.collection("cache-sessions");
       //check if exists
       const sessionDocumentReference =
-        sessionCollectionReference.doc(chatsession);
+        sessionCollectionReference.doc(sessionid);
       const documentSnapshot = await sessionDocumentReference.get();
       if (!documentSnapshot.exists) {
         throw new Error("chat does not exist");
@@ -93,7 +93,9 @@ export class ApiService {
         message: message,
         created: new Date(),
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log("error", e);
+    }
   }
 }
 

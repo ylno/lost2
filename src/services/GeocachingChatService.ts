@@ -18,7 +18,7 @@ import {
   UserTypingEvent,
 } from "@chatscope/use-chat";
 import { firestoreDb } from "@/lib/frontend/Firebase";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { collection, getDocs, orderBy, query } from "firebase/firestore/lite";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { nanoid } from "nanoid";
 import { StoredChatMessage } from "@/types/types";
@@ -80,7 +80,9 @@ export class GeocachingChatService implements IChatService {
         firestoreDb,
         `/cache-sessions/${cachesession}/chat`,
       );
-      getDocs(collectionReference).then((snapshot) => {
+      const queryRef = query(collectionReference, orderBy("created"));
+
+      getDocs(queryRef).then((snapshot) => {
         snapshot.docs.map((doc) => {
           console.log(doc.data());
           const storedChatMessage = doc.data() as StoredChatMessage;
@@ -122,6 +124,32 @@ export class GeocachingChatService implements IChatService {
           console.log("changetype", change.type);
           if (change.type === "added") {
             console.log("Neues Dokument: ", change.doc.data());
+          }
+        });
+      });
+
+      onSnapshot(collectionReference, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          console.log("changetype", change.type);
+          if (change.type === "added") {
+            console.log("Neues Dokument: ", change.doc.data());
+            const storedChatMessage = change.doc.data() as StoredChatMessage;
+            this.storage?.addMessage(
+              new ChatMessage({
+                id: nanoid(),
+                direction:
+                  storedChatMessage.sender == "You"
+                    ? MessageDirection.Outgoing
+                    : MessageDirection.Incoming,
+                status: MessageStatus.Sent,
+                senderId: storedChatMessage.sender,
+                contentType: MessageContentType.TextHtml,
+                content: storedChatMessage.message as any,
+              }),
+              cachesession,
+              false,
+            );
+            this.updateState();
           }
         });
       });
