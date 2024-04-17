@@ -16,7 +16,7 @@ export default async function handler(
   const { sessionid, message, id } = req.body as ChatMessage;
 
   try {
-    await apiService.storeChatMessage(sessionid, message, id);
+    await apiService.processChatMessage(sessionid, message, id);
     return res.status(200).send({});
   } catch (e) {
     console.log("error", e);

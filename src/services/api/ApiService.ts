@@ -1,29 +1,57 @@
 import { firestore } from "@/lib/backend/FirebaseAdmin";
 import { assign, createActor, createMachine, StateMachine } from "xstate";
 import { CacheSession } from "@/types/types";
+import { act } from "react-dom/test-utils";
 
 export class ApiService {
   stateMachine: any;
   constructor() {
     this.stateMachine = createMachine({
+      id: "chat",
+      initial: "stage1",
       context: {
-        count: 0,
+        answer: "",
       },
-      on: {
-        INC: {
-          actions: assign({
-            count: ({ context }) => context.count + 1,
-          }),
+      states: {
+        stage1: {
+          on: {
+            CORRECT_ANSWER: "stage2",
+          },
+          meta: {
+            message: "Willkommen im Chat! (Stage 1) Was ist 2+2?",
+          },
         },
-        DEC: {
-          actions: assign({
-            count: ({ context }) => context.count - 1,
-          }),
+        stage2: {
+          on: {
+            CORRECT_ANSWER: "stage3",
+          },
+          meta: {
+            message:
+              "Richtig! Nächste Frage: (Stage 2) Nenne die Hauptstadt von Deutschland.",
+          },
         },
-        SET: {
-          actions: assign({
-            count: ({ event }) => event.value,
-          }),
+        stage3: {
+          on: {
+            CORRECT_ANSWER: "success",
+            WRONG_ANSWER: "failure",
+          },
+          meta: {
+            message:
+              "Fast da! Letzte Frage: (Stage 3) Wie viele Kontinente gibt es?",
+          },
+        },
+        success: {
+          type: "final",
+          meta: {
+            message: "Glückwunsch! Alle Antworten waren richtig.",
+          },
+        },
+        failure: {
+          type: "final",
+          meta: {
+            message:
+              "Leider war die letzte Antwort falsch. Versuche es nochmal!",
+          },
         },
       },
     });
@@ -46,7 +74,7 @@ export class ApiService {
     const countActor = createActor(this.stateMachine).start();
 
     countActor.subscribe((state) => {
-      console.log(state.context.count);
+      console.log(state);
     });
 
     // countActor.send({ type: "INC" });
@@ -81,22 +109,54 @@ export class ApiService {
     }
   }
 
-  async storeChatMessage(sessionid: string, message: string, id: string) {
+  async processChatMessage(sessionid: string, message: string, id: string) {
     try {
       console.log("storeChatMessage", sessionid, message);
       const sessionCollectionReference = firestore.collection("cache-sessions");
       //check if exists
       const sessionDocumentReference =
         sessionCollectionReference.doc(sessionid);
-      const documentSnapshot = await sessionDocumentReference.get();
-      if (!documentSnapshot.exists) {
+      const cacheSessionReference = await sessionDocumentReference.get();
+      if (!cacheSessionReference.exists) {
         throw new Error("chat does not exist");
       }
+
+      const cacheSession = cacheSessionReference.data() as CacheSession;
+      console.log("cacheSession", JSON.parse(cacheSession.state));
+
+      const actor = createActor(this.stateMachine, {
+        snapshot: JSON.parse(cacheSession.state),
+      }).start();
+      console.log("actor restored");
+
+      actor.subscribe((state) => {
+        console.log("new state", state);
+      });
+
       await sessionDocumentReference.collection("chat").doc().set({
         id: id,
         sender: "You",
         message: message,
         created: new Date(),
+      });
+
+      actor.send({ type: "CORRECT_ANSWER" });
+
+      const snapshot = actor.getSnapshot();
+      const meta = snapshot.getMeta();
+      console.log(meta);
+      const sendAnswer = meta[`chat.${snapshot.value}`].message;
+      console.log(sendAnswer);
+
+      await sessionDocumentReference.collection("chat").doc().set({
+        id: id,
+        sender: "Tim",
+        message: sendAnswer,
+        created: new Date(),
+      });
+
+      await sessionDocumentReference.update({
+        state: JSON.stringify(actor.getPersistedSnapshot()),
       });
     } catch (e) {
       console.log("error", e);
