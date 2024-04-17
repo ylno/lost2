@@ -18,11 +18,16 @@ import {
   UserTypingEvent,
 } from "@chatscope/use-chat";
 import { firestoreDb } from "@/lib/frontend/Firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore/lite";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  onSnapshot,
+} from "firebase/firestore";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { nanoid } from "nanoid";
 import { StoredChatMessage } from "@/types/types";
-import { onSnapshot } from "@firebase/firestore";
 
 type EventHandlers = {
   onMessage: ChatEventHandler<
@@ -119,16 +124,8 @@ export class GeocachingChatService implements IChatService {
         });
       });
 
-      onSnapshot(collectionReference, (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          console.log("changetype", change.type);
-          if (change.type === "added") {
-            console.log("Neues Dokument: ", change.doc.data());
-          }
-        });
-      });
-
-      onSnapshot(collectionReference, (snapshot) => {
+      onSnapshot(queryRef, (snapshot) => {
+        console.log("snapshot", queryRef);
         snapshot.docChanges().forEach((change) => {
           console.log("changetype", change.type);
           if (change.type === "added") {
@@ -233,18 +230,6 @@ export class GeocachingChatService implements IChatService {
     console.log("message", stringMessage);
 
     frontendService.sendChatMessage(stringMessage);
-    // console.log("send");
-    // const messageEvent = new CustomEvent("chat-protocol", {
-    //   detail: {
-    //     type: "message",
-    //     message,
-    //     conversationId,
-    //     sender: this,
-    //   },
-    // });
-    //
-    // window.dispatchEvent(messageEvent);
-
     return message;
   }
 
