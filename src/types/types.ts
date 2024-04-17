@@ -8,6 +8,7 @@ export type CacheSession = {
 };
 
 export type StoredChatMessage = {
+  id: string;
   sender: string;
   created: Timestamp;
   message: string;

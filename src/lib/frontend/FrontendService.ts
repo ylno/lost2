@@ -19,10 +19,11 @@ class FrontendService {
     return localStorage?.getItem("cacheSession");
   }
 
-  async sendChatMessage(message: string) {
+  async sendChatMessage(message: string, id: string) {
     console.log("send chat message");
     const axiosResponse = await axios.post("api/chat", {
       sessionid: this.getCachesession(),
+      id: id,
       message: message,
     });
   }

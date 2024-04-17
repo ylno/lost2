@@ -77,7 +77,7 @@ export class ApiService {
     }
   }
 
-  async storeChatMessage(sessionid: string, message: string) {
+  async storeChatMessage(sessionid: string, message: string, id: string) {
     try {
       console.log("storeChatMessage", sessionid, message);
       const sessionCollectionReference = firestore.collection("cache-sessions");
@@ -89,6 +89,7 @@ export class ApiService {
         throw new Error("chat does not exist");
       }
       await sessionDocumentReference.collection("chat").doc().set({
+        id: id,
         sender: "You",
         message: message,
         created: new Date(),

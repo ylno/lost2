@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { apiService } from "@/services/api/ApiService";
 
 type ChatMessage = {
+  id: string;
   sessionid: string;
   message: string;
 };
@@ -12,10 +13,10 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   console.log("data", req.body);
-  const { sessionid, message } = req.body as ChatMessage;
+  const { sessionid, message, id } = req.body as ChatMessage;
 
   try {
-    await apiService.storeChatMessage(sessionid, message);
+    await apiService.storeChatMessage(sessionid, message, id);
     return res.status(200).send({});
   } catch (e) {
     console.log("error", e);

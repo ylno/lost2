@@ -24,6 +24,7 @@ import {
   orderBy,
   query,
   onSnapshot,
+  Unsubscribe,
 } from "firebase/firestore";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { nanoid } from "nanoid";
@@ -69,6 +70,7 @@ export class GeocachingChatService implements IChatService {
     onUserPresenceChanged: () => {},
     onUserTyping: () => {},
   };
+  private firebaseUnsubscribe: Unsubscribe | null = null;
 
   constructor(storage: IStorage, update: UpdateState) {
     this.storage = storage;
@@ -78,7 +80,7 @@ export class GeocachingChatService implements IChatService {
     try {
       const cachesession = frontendService.getCachesession();
       const conversationId = cachesession;
-      if (!cachesession) {
+      if (!cachesession || !conversationId) {
         throw new Error("no cachesession");
       }
       const collectionReference = collection(
@@ -87,53 +89,38 @@ export class GeocachingChatService implements IChatService {
       );
       const queryRef = query(collectionReference, orderBy("created"));
 
-      getDocs(queryRef).then((snapshot) => {
-        snapshot.docs.map((doc) => {
-          console.log(doc.data());
-          const storedChatMessage = doc.data() as StoredChatMessage;
-          this.storage?.addMessage(
-            new ChatMessage({
-              id: nanoid(),
-              direction:
-                storedChatMessage.sender == "You"
-                  ? MessageDirection.Outgoing
-                  : MessageDirection.Incoming,
-              status: MessageStatus.Sent,
-              senderId: storedChatMessage.sender,
-              contentType: MessageContentType.TextHtml,
-              content: storedChatMessage.message as any,
-            }),
-            cachesession,
-            false,
-          );
-          this.updateState();
+      // getDocs(queryRef).then((snapshot) => {
+      //   snapshot.docs.map((doc) => {
+      //     console.log(doc.data());
+      //     const storedChatMessage = doc.data() as StoredChatMessage;
+      //     this.storage?.addMessage(
+      //       new ChatMessage({
+      //         id: storedChatMessage.id || nanoid(),
+      //         direction:
+      //           storedChatMessage.sender == "You"
+      //             ? MessageDirection.Outgoing
+      //             : MessageDirection.Incoming,
+      //         status: MessageStatus.Sent,
+      //         senderId: storedChatMessage.sender,
+      //         contentType: MessageContentType.TextHtml,
+      //         content: storedChatMessage.message as any,
+      //       }),
+      //       cachesession,
+      //       false,
+      //     );
+      //   });
+      // });
+      // this.updateState();
 
-          // const message1 = new ChatMessage({
-          //   id: nanoid(),
-          //   direction: MessageDirection.Incoming,
-          //   status: MessageStatus.Sent,
-          //   senderId: storedChatMessage.sender,
-          //   contentType: MessageContentType.TextHtml,
-          //   content: storedChatMessage.message as any,
-          // });
-          // console.log("message111", message1);
-          // this.eventHandlers.onMessage(
-          //   // @ts-ignore
-          //   new MessageEvent({ message: message1, conversationId }),
-          // );
-        });
-      });
-
-      onSnapshot(queryRef, (snapshot) => {
-        console.log("snapshot", queryRef);
+      this.firebaseUnsubscribe = onSnapshot(queryRef, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
-          console.log("changetype", change.type);
           if (change.type === "added") {
-            console.log("Neues Dokument: ", change.doc.data());
+            const conversation =
+              this.storage?.getConversation(conversationId)[0];
             const storedChatMessage = change.doc.data() as StoredChatMessage;
             this.storage?.addMessage(
               new ChatMessage({
-                id: nanoid(),
+                id: storedChatMessage.id || nanoid(),
                 direction:
                   storedChatMessage.sender == "You"
                     ? MessageDirection.Outgoing
@@ -161,75 +148,69 @@ export class GeocachingChatService implements IChatService {
     console.log("constructor", window);
     if (typeof window !== "undefined") {
       // Client-side-only code
-
-      window.addEventListener("chat-protocol", (evt: Event) => {
-        const event = evt as CustomEvent;
-        console.log("event", event);
-
-        const {
-          detail: { type },
-          detail,
-        } = event;
-
-        if (type === "message") {
-          const message =
-            detail.message as ChatMessage<MessageContentType.TextHtml>;
-
-          message.direction = MessageDirection.Incoming;
-          const { conversationId } = detail as { conversationId: string };
-          console.log("sender", detail.sender);
-          if (this.eventHandlers.onMessage && detail.sender !== this) {
-            // Running the onMessage callback registered by ChatProvider will cause:
-            // 1. Add a message to the conversation to which the message was sent
-            // 2. If a conversation with the given id exists and is not active,
-            //    its unreadCounter will be incremented
-            // 3. Remove information about the sender who is writing from the conversation
-            // 4. Re-render
-            //
-            // Note!
-            // If a conversation with such id does not exist,
-            // the message will be added, but the conversation object will not be created.
-            // You have to take care of such a case yourself.
-            // You can check here if there is already a conversation in storage.
-            // If it is not there, you can create it before calling onMessage.
-            // After adding a conversation to the list, you don't need to manually run updateState
-            // because ChatProvider in onMessage will do it.
-            this.eventHandlers.onMessage(
-              // @ts-ignore
-              new MessageEvent({ message, conversationId }),
-            );
-          }
-        } else if (type === "typing") {
-          const { userId, isTyping, conversationId, content, sender } = detail;
-
-          if (this.eventHandlers.onUserTyping && sender !== this) {
-            // Running the onUserTyping callback registered by ChatProvider will cause:
-            // 1. Add the user to the list of users who are typing in the conversation
-            // 2. Debounce
-            // 3. Re-render
-            this.eventHandlers.onUserTyping(
-              new UserTypingEvent({
-                userId,
-                isTyping,
-                conversationId,
-                content,
-              }),
-            );
-          }
-        }
-      });
+      // window.addEventListener("chat-protocol", (evt: Event) => {
+      //   const event = evt as CustomEvent;
+      //   console.log("event", event);
+      //
+      //   const {
+      //     detail: { type },
+      //     detail,
+      //   } = event;
+      //
+      //   if (type === "message") {
+      //     const message =
+      //       detail.message as ChatMessage<MessageContentType.TextHtml>;
+      //
+      //     message.direction = MessageDirection.Incoming;
+      //     const { conversationId } = detail as { conversationId: string };
+      //     console.log("sender", detail.sender);
+      //     if (this.eventHandlers.onMessage && detail.sender !== this) {
+      //       // Running the onMessage callback registered by ChatProvider will cause:
+      //       // 1. Add a message to the conversation to which the message was sent
+      //       // 2. If a conversation with the given id exists and is not active,
+      //       //    its unreadCounter will be incremented
+      //       // 3. Remove information about the sender who is writing from the conversation
+      //       // 4. Re-render
+      //       //
+      //       // Note!
+      //       // If a conversation with such id does not exist,
+      //       // the message will be added, but the conversation object will not be created.
+      //       // You have to take care of such a case yourself.
+      //       // You can check here if there is already a conversation in storage.
+      //       // If it is not there, you can create it before calling onMessage.
+      //       // After adding a conversation to the list, you don't need to manually run updateState
+      //       // because ChatProvider in onMessage will do it.
+      //       this.eventHandlers.onMessage(
+      //         // @ts-ignore
+      //         new MessageEvent({ message, conversationId }),
+      //       );
+      //     }
+      //   } else if (type === "typing") {
+      //     const { userId, isTyping, conversationId, content, sender } = detail;
+      //
+      //     if (this.eventHandlers.onUserTyping && sender !== this) {
+      //       // Running the onUserTyping callback registered by ChatProvider will cause:
+      //       // 1. Add the user to the list of users who are typing in the conversation
+      //       // 2. Debounce
+      //       // 3. Re-render
+      //       this.eventHandlers.onUserTyping(
+      //         new UserTypingEvent({
+      //           userId,
+      //           isTyping,
+      //           conversationId,
+      //           content,
+      //         }),
+      //       );
+      //     }
+      //   }
+      // });
     }
   }
 
   sendMessage({ message, conversationId }: SendMessageServiceParams) {
-    // We send messages using a CustomEvent dispatched to the window object.
-    // They are received in the callback assigned in the constructor.
-    // In a real application, instead of dispatching the event here,
-    // you will implement sending messages to your chat server.
     const stringMessage = message.content as unknown as string;
     console.log("message", stringMessage);
-
-    frontendService.sendChatMessage(stringMessage);
+    frontendService.sendChatMessage(stringMessage, message.id);
     return message;
   }
 
