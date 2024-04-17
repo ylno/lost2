@@ -83,6 +83,21 @@ export default function Chat({}) {
     console.log("messages", currentMessages);
   };
 
+  function filterMessages(
+    messages: ChatMessage<MessageContentType>[],
+  ): ChatMessage<MessageContentType>[] {
+    const seenMessages = new Set<string>();
+
+    return messages.filter((message) => {
+      if (!seenMessages.has(message.id)) {
+        seenMessages.add(message.id);
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
+
   return (
     <div
       style={{
@@ -92,40 +107,40 @@ export default function Chat({}) {
       }}
     >
       <MainContainer>
-        <Sidebar position="left">
-          <ConversationList>
-            {conversations.map((c, idx) => {
-              // Helper for getting the data of the first participant
-              const [avatar, name] = (() => {
-                const participant =
-                  c.participants.length > 0 ? c.participants[0] : undefined;
-                if (participant) {
-                  const user = getUser(participant.id);
-                  if (user) {
-                    return [
-                      <Avatar src={user.avatar} key={`avatar-${user.id}`} />,
-                      user.username,
-                    ];
-                  }
-                }
+        {/*<Sidebar position="left">*/}
+        {/*  <ConversationList>*/}
+        {/*    {conversations.map((c, idx) => {*/}
+        {/*      // Helper for getting the data of the first participant*/}
+        {/*      const [avatar, name] = (() => {*/}
+        {/*        const participant =*/}
+        {/*          c.participants.length > 0 ? c.participants[0] : undefined;*/}
+        {/*        if (participant) {*/}
+        {/*          const user = getUser(participant.id);*/}
+        {/*          if (user) {*/}
+        {/*            return [*/}
+        {/*              <Avatar src={user.avatar} key={`avatar-${user.id}`} />,*/}
+        {/*              user.username,*/}
+        {/*            ];*/}
+        {/*          }*/}
+        {/*        }*/}
 
-                return [undefined, undefined];
-              })();
+        {/*        return [undefined, undefined];*/}
+        {/*      })();*/}
 
-              return (
-                <Conversation
-                  key={c.id}
-                  name={name}
-                  active={activeConversation?.id === c.id}
-                  unreadCnt={c.unreadCounter}
-                  onClick={(e) => setActiveConversation(c.id)}
-                >
-                  {avatar}
-                </Conversation>
-              );
-            })}
-          </ConversationList>
-        </Sidebar>
+        {/*      return (*/}
+        {/*        <Conversation*/}
+        {/*          key={c.id}*/}
+        {/*          name={name}*/}
+        {/*          active={activeConversation?.id === c.id}*/}
+        {/*          unreadCnt={c.unreadCounter}*/}
+        {/*          onClick={(e) => setActiveConversation(c.id)}*/}
+        {/*        >*/}
+        {/*          {avatar}*/}
+        {/*        </Conversation>*/}
+        {/*      );*/}
+        {/*    })}*/}
+        {/*  </ConversationList>*/}
+        {/*</Sidebar>*/}
 
         <ChatContainer>
           <ConversationHeader>
@@ -137,7 +152,7 @@ export default function Chat({}) {
             {currentMessages.map((g) => (
               <MessageGroup key={g.id} direction={g.direction}>
                 <MessageGroup.Messages>
-                  {g.messages.map((m) => (
+                  {filterMessages(g.messages).map((m) => (
                     <Message
                       key={m.id}
                       model={{

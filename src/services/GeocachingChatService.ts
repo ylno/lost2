@@ -63,12 +63,16 @@ export class GeocachingChatService implements IChatService {
   updateState: UpdateState;
 
   eventHandlers: EventHandlers = {
-    onMessage: () => {},
+    onMessage: (m) => {
+      console.log("onMessage", m);
+    },
     onConnectionStateChanged: () => {},
     onUserConnected: () => {},
     onUserDisconnected: () => {},
     onUserPresenceChanged: () => {},
-    onUserTyping: () => {},
+    onUserTyping: () => {
+      console.log("onUserTyping");
+    },
   };
   private firebaseUnsubscribe: Unsubscribe | null = null;
 
@@ -115,9 +119,8 @@ export class GeocachingChatService implements IChatService {
       this.firebaseUnsubscribe = onSnapshot(queryRef, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
-            const conversation =
-              this.storage?.getConversation(conversationId)[0];
             const storedChatMessage = change.doc.data() as StoredChatMessage;
+
             this.storage?.addMessage(
               new ChatMessage({
                 id: storedChatMessage.id || nanoid(),
@@ -209,7 +212,7 @@ export class GeocachingChatService implements IChatService {
 
   sendMessage({ message, conversationId }: SendMessageServiceParams) {
     const stringMessage = message.content as unknown as string;
-    console.log("message", stringMessage);
+    console.log("[message]", stringMessage);
     frontendService.sendChatMessage(stringMessage, message.id);
     return message;
   }
