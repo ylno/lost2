@@ -67,7 +67,7 @@ export class ApiService {
       const chatDocument = documentReference.collection("chat").doc();
       await chatDocument.set({
         sender: "Tim",
-        message: "Hallo Freund",
+        message: `Hallo, mein Name ist Tim. Meine Schwester ist entführt worden. Kannst du mir helfen sie zu finden? Hast du noch Freunde, die uns bei der Suche helfen können? Gib ihnen den Einstiegscode "${documentReference.id}" weiter, damit Sie hier untertützen können.`,
         created: new Date(),
       });
 
