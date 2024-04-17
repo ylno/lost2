@@ -21,16 +21,24 @@ import {
 } from "@chatscope/use-chat";
 import Chat from "./chat";
 import { nanoid } from "nanoid";
-import { useEffect, useState } from "react";
-import { ExampleChatService } from "@/service/ExampleChatService";
+import { SetStateAction, useEffect, useState } from "react";
+import { GeocachingChatService } from "@/services/GeocachingChatService";
+import { frontendService } from "@/lib/frontend/FrontendService";
 
+console.log("start initialization");
 // Storage needs to generate id for messages and groups
 const messageIdGenerator = () => nanoid();
 const groupIdGenerator = () => nanoid();
+const cachesession = frontendService.getCachesession();
+console.log("cachesession", cachesession);
+if (!cachesession) {
+  throw new Error("no_cache_session");
+}
 
 // Create serviceFactory
 const serviceFactory = (storage: IStorage, updateState: UpdateState) => {
-  return new ExampleChatService(storage, updateState);
+  console.log("servicefactory called");
+  return new GeocachingChatService(storage, updateState);
 };
 
 const timUser = {
@@ -38,7 +46,10 @@ const timUser = {
   avatar: "/tim.svg",
 };
 
-const chatStorage = new BasicStorage({ groupIdGenerator, messageIdGenerator });
+const chatStorage = new BasicStorage({
+  groupIdGenerator,
+  messageIdGenerator,
+});
 
 const tim = new User({
   id: timUser.name,
@@ -54,7 +65,10 @@ const tim = new User({
 chatStorage.addUser(
   new User({
     id: tim.username,
-    presence: new Presence({ status: UserStatus.Available, description: "" }),
+    presence: new Presence({
+      status: UserStatus.Available,
+      description: "",
+    }),
     firstName: "",
     lastName: "",
     username: tim.username,
@@ -67,9 +81,12 @@ chatStorage.addUser(
 chatStorage.addUser(
   new User({
     id: "You",
-    presence: new Presence({ status: UserStatus.Available, description: "" }),
-    firstName: "asdas",
-    lastName: "adsasd",
+    presence: new Presence({
+      status: UserStatus.Available,
+      description: "",
+    }),
+    firstName: "Geo",
+    lastName: "Cacher",
     username: "You",
     email: "",
     avatar: tim.avatar,
@@ -78,7 +95,7 @@ chatStorage.addUser(
 );
 
 const conversation = new Conversation({
-  id: nanoid(),
+  id: cachesession,
   participants: [
     new Participant({
       id: "Tim",
@@ -91,32 +108,26 @@ const conversation = new Conversation({
   ],
   unreadCounter: 0,
   typingUsers: new TypingUsersList({ items: [] }),
-  draft: "sdfsfdf",
+  draft: "",
 });
 chatStorage.addConversation(conversation);
-chatStorage.addMessage(
-  new ChatMessage({
-    id: nanoid(),
-    direction: MessageDirection.Incoming,
-    status: MessageStatus.Sent,
-    senderId: "Tim",
-    contentType: MessageContentType.TextHtml,
-    content: "hallo Mate" as any,
-  }),
-  conversation.id,
-);
-
 chatStorage.setActiveConversation(conversation.id);
 
-export default function MyChatProvider() {
+console.log("storage", chatStorage);
+// console.log("service factory created", xserviceFactory);
+
+export default function GCChatProvider() {
   const [isWindowDefined, setIsWindowDefined] = useState(false);
+
   useEffect(() => {
     console.log("init", serviceFactory, window);
     setIsWindowDefined(typeof window !== "undefined");
   }, []);
 
   return (
-    isWindowDefined && (
+    isWindowDefined &&
+    typeof serviceFactory === "function" &&
+    chatStorage && (
       <ChatProvider
         serviceFactory={serviceFactory}
         storage={chatStorage}
