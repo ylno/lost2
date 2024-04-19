@@ -1,176 +1,84 @@
-"use client";
-import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
-import {
-  Avatar,
-  ChatContainer,
-  Conversation,
-  ConversationHeader,
-  ConversationList,
-  MainContainer,
-  Message,
-  MessageGroup,
-  MessageInput,
-  MessageList,
-  Sidebar,
-} from "@chatscope/chat-ui-kit-react";
-import {
-  ChatMessage,
-  MessageContentType,
-  MessageDirection,
-  MessageStatus,
-  useChat,
-} from "@chatscope/use-chat";
-import { useMemo, useState } from "react";
-import { nanoid } from "nanoid";
+import "./chat.scss";
+import { FormEvent, useEffect, useState } from "react";
+import { Conversation } from "@/types/types";
+import { FaRegPaperPlane, FaLocationDot, FaCamera } from "react-icons/fa6";
 
-export default function Chat({}) {
-  const [value, setValue] = useState("");
 
-  // Get all chat related values and methods from useChat hook
-  const {
-    currentMessages,
-    conversations,
-    activeConversation,
-    setActiveConversation,
-    sendMessage,
-    getUser,
-  } = useChat();
+type ChatParameter = {
+  sendChatMessage: (message: string) => Promise<void>;
+  conversation: Conversation;
+};
 
-  const [currentUserAvatar, currentUserName] = useMemo(() => {
-    if (activeConversation) {
-      const participant =
-        activeConversation.participants.length > 0
-          ? activeConversation.participants[0]
-          : undefined;
+export function Chat({ sendChatMessage, conversation }: ChatParameter) {
+  const [message, setMessage] = useState("");
+  const [firstDate, setFirstDate] = useState<Date | null>();
 
-      if (participant) {
-        const user = getUser(participant.id);
-        if (user) {
-          return [
-            <Avatar src={user.avatar} key={`avatar-${user.id}`} />,
-            user.username,
-          ];
-        }
-      }
-    }
-    return [undefined, undefined];
-  }, [activeConversation]);
-
-  const handleSend = (text: string) => {
-    console.log("send", text);
-
-    // Logger user (sender)
-    const currentUserId = "You";
-
-    const message = new ChatMessage({
-      id: nanoid(),
-      content: text as any,
-      contentType: MessageContentType.TextHtml,
-      senderId: currentUserId,
-      direction: MessageDirection.Outgoing,
-      status: MessageStatus.Sent,
-    });
-
-    if (!activeConversation) {
-      throw new Error("no conversation");
-    }
-    sendMessage({
-      message,
-      conversationId: activeConversation.id,
-      senderId: currentUserId,
-    });
-
-    console.log("messages", currentMessages);
-  };
-
-  function filterMessages(
-    messages: ChatMessage<MessageContentType>[],
-  ): ChatMessage<MessageContentType>[] {
-    const seenMessages = new Set<string>();
-
-    return messages.filter((message) => {
-      if (!seenMessages.has(message.id)) {
-        seenMessages.add(message.id);
-        return true;
-      } else {
-        return false;
-      }
-    });
+  async function submitForm(e: FormEvent) {
+    console.log("formevent", e);
+    e.preventDefault();
+    await sendChatMessage(message);
+    setMessage("");
   }
 
+  useEffect(() => {
+    if (conversation.messages.length > 0) {
+      setFirstDate(new Date(conversation.messages[0].created.toDate()));
+    }
+  }, [conversation]);
+
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <MainContainer>
-        {/*<Sidebar position="left">*/}
-        {/*  <ConversationList>*/}
-        {/*    {conversations.map((c, idx) => {*/}
-        {/*      // Helper for getting the data of the first participant*/}
-        {/*      const [avatar, name] = (() => {*/}
-        {/*        const participant =*/}
-        {/*          c.participants.length > 0 ? c.participants[0] : undefined;*/}
-        {/*        if (participant) {*/}
-        {/*          const user = getUser(participant.id);*/}
-        {/*          if (user) {*/}
-        {/*            return [*/}
-        {/*              <Avatar src={user.avatar} key={`avatar-${user.id}`} />,*/}
-        {/*              user.username,*/}
-        {/*            ];*/}
-        {/*          }*/}
-        {/*        }*/}
+    <div className="center">
+      <div className="chat">
+        <div className="contact bar">
+          <div
+            className="pic"
+            style={{
+              backgroundImage: `url("${conversation.chatPartner.avatar}")`,
+            }}
+          ></div>
+          <div className="name">{conversation.chatPartner.name}</div>
+        </div>
+        <div className="messages" id="chat">
+          {firstDate && (
+            <div className="time">{firstDate.toLocaleString()}</div>
+          )}
+          {conversation.messages.map((message) => (
+            <div
+              className={`message ${message.sender === conversation.chatOwner.id ? "outgoing" : "incoming"}`}
+              key={message.id}
+            >
+              {message.message}
+            </div>
+          ))}
 
-        {/*        return [undefined, undefined];*/}
-        {/*      })();*/}
-
-        {/*      return (*/}
-        {/*        <Conversation*/}
-        {/*          key={c.id}*/}
-        {/*          name={name}*/}
-        {/*          active={activeConversation?.id === c.id}*/}
-        {/*          unreadCnt={c.unreadCounter}*/}
-        {/*          onClick={(e) => setActiveConversation(c.id)}*/}
-        {/*        >*/}
-        {/*          {avatar}*/}
-        {/*        </Conversation>*/}
-        {/*      );*/}
-        {/*    })}*/}
-        {/*  </ConversationList>*/}
-        {/*</Sidebar>*/}
-
-        <ChatContainer>
-          <ConversationHeader>
-            {currentUserAvatar}
-            <ConversationHeader.Content userName={currentUserName} />
-          </ConversationHeader>
-
-          <MessageList>
-            {currentMessages.map((g) => (
-              <MessageGroup key={g.id} direction={g.direction}>
-                <MessageGroup.Messages>
-                  {filterMessages(g.messages).map((m) => (
-                    <Message
-                      key={m.id}
-                      model={{
-                        type: "text",
-                        payload: m.content,
-                        direction: "incoming",
-                        position: "normal",
-                      }}
-                    />
-                  ))}
-                </MessageGroup.Messages>
-              </MessageGroup>
-            ))}
-          </MessageList>
-
-          <MessageInput onSend={handleSend} />
-        </ChatContainer>
-      </MainContainer>
+          {/*<div className="message stark">*/}
+          {/*  <div className="typing typing-1"></div>*/}
+          {/*  <div className="typing typing-2"></div>*/}
+          {/*  <div className="typing typing-3"></div>*/}
+          {/*</div>*/}
+        </div>
+        <div className="input">
+          <form className={"form"} onSubmit={submitForm}>
+            <button className={"form-item image"}>
+              <FaCamera />
+            </button>
+            <button className={"form-item location"}>
+              <FaLocationDot />
+            </button>
+            <input
+              className={"msg-input"}
+              value={message}
+              placeholder="Type your message here!"
+              type="text"
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button className={"form-item send"}>
+              <FaRegPaperPlane />
+            </button>
+          </form>
+          <i className="fas fa-microphone"></i>
+        </div>
+      </div>
     </div>
   );
 }

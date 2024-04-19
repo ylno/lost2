@@ -1,0 +1,65 @@
+@import "variables";
+
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 100vw;
+
+	.card {
+		background: #FFFFFF;
+		border-radius: 1rem;
+		padding: 1rem;
+		margin: 2rem;
+
+		.card-element {
+			margin: 1rem;
+			display: flex;
+
+			&.form {
+				display: flex;
+				gap: 0.5rem;
+			}
+		}
+
+
+		.msg-input {
+			background-image:none;
+			background-color: white;
+			padding: 0.5rem 1rem;
+			border-radius: 1.125rem;
+			border: 1px solid $text-3;
+			flex-grow: 2;
+			font-family: "Red hat Display", sans-serif;
+			font-weight: 400;
+			letter-spacing: 0.025em;
+
+			&:placeholder {
+				color: $text-3;
+			}
+		}
+
+		.form-item {
+			border-radius: 5rem;
+			border: none;
+			height: 40px;
+			width: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&.send {
+				background: $primary;
+				color: #fff;
+				border: none;
+			}
+		}
+
+
+
+	}
+}
+
+
+
