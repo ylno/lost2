@@ -6,6 +6,8 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { firestoreDb } from "@/lib/frontend/Firebase";
 import { nanoid } from "nanoid";
+import { router } from "next/client";
+import { useRouter } from "next/navigation";
 
 const emptyConversation: Conversation = {
   chatOwner: {
@@ -24,6 +26,7 @@ const emptyConversation: Conversation = {
 export default function ChatPage() {
   const [conversation, setConversation] =
     useState<Conversation>(emptyConversation);
+  const router = useRouter();
 
   useEffect(() => {
     const conv = emptyConversation;
@@ -31,7 +34,8 @@ export default function ChatPage() {
     const cachesession = frontendService.getCachesession();
     const conversationId = cachesession;
     if (!cachesession || !conversationId) {
-      throw new Error("no cachesession");
+      router.push("/");
+      return;
     }
     const collectionReference = collection(
       firestoreDb,
