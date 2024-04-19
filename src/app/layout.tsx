@@ -19,7 +19,7 @@ export default function RootLayout({
       <head>
         <meta
           name="viewport"
-          content="height=device-height, initial-scale=1.0"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1"
         />
       </head>
       <body className={inter.className}>{children}</body>

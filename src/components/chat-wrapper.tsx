@@ -9,7 +9,7 @@ export function ChatWrapper() {
   useEffect(() => {
     setConversation({
       chatOwner: {
-        name: "Michael",
+        name: "Testuser",
         id: "You",
         avatar: "",
       },

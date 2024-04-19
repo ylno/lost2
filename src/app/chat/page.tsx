@@ -22,7 +22,8 @@ const emptyConversation: Conversation = {
 };
 
 export default function ChatPage() {
-  const [conversation, setConversation] = useState<Conversation>();
+  const [conversation, setConversation] =
+    useState<Conversation>(emptyConversation);
 
   useEffect(() => {
     const conv = emptyConversation;
@@ -38,19 +39,18 @@ export default function ChatPage() {
     );
     const queryRef = query(collectionReference, orderBy("created"));
     const unsubscribe = onSnapshot(queryRef, (snapshot) => {
+      const newMessages: StoredChatMessage[] = [];
       snapshot.docChanges().forEach((change) => {
-        const newMessages = snapshot
-          .docChanges()
-          .filter((change) => change.type === "added")
-          .map((change) => change.doc.data() as StoredChatMessage);
-
-        if (newMessages.length > 0) {
-          setConversation((prevConversation) => ({
-            ...(prevConversation || emptyConversation),
-            messages: [...(prevConversation?.messages || []), ...newMessages],
-          }));
+        if (change.type == "added") {
+          newMessages.push(change.doc.data() as StoredChatMessage);
         }
       });
+      if (newMessages.length > 0) {
+        setConversation((prevConversation) => ({
+          ...(prevConversation || emptyConversation),
+          messages: [...(prevConversation?.messages || []), ...newMessages],
+        }));
+      }
     });
     setConversation(conv);
 
