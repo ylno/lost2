@@ -1,7 +1,6 @@
 import { firestore } from "@/lib/backend/FirebaseAdmin";
-import { assign, createActor, createMachine, StateMachine } from "xstate";
+import { createActor, createMachine } from "xstate";
 import { CacheSession } from "@/types/types";
-import { act } from "react-dom/test-utils";
 
 export class ApiService {
   stateMachine: any;

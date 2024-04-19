@@ -1,6 +1,7 @@
 import "./chat.scss";
 import { FormEvent, useEffect, useState } from "react";
 import { Conversation } from "@/types/types";
+import { FaRegPaperPlane } from "react-icons/fa6";
 
 type ChatParameter = {
   sendChatMessage: (message: string) => Promise<void>;
@@ -56,19 +57,23 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
           {/*</div>*/}
         </div>
         <div className="input">
-
-
-          <form className={"form"}onSubmit={submitForm}>
-            <button className={"form-item image"}><i className="fas fa-camera"></i></button>
-            <button className={"form-item location"}><i className="fas fa-location-dot"></i></button>
+          <form className={"form"} onSubmit={submitForm}>
+            <button className={"form-item image"}>
+              <i className="fas fa-camera"></i>
+            </button>
+            <button className={"form-item location"}>
+              <i className="fas fa-location-dot"></i>
+            </button>
             <input
-                className={"form-item"}
+              className={"form-item"}
               value={message}
               placeholder="Type your message here!"
               type="text"
               onChange={(e) => setMessage(e.target.value)}
             />
-              <button className={"form-item send"}>Send</button>
+            <button className={"form-item send"}>
+              <FaRegPaperPlane />
+            </button>
           </form>
           <i className="fas fa-microphone"></i>
         </div>
