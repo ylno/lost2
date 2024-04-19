@@ -1,9 +1,7 @@
 "use client";
-import GCChatProvider from "@/components/chat-provider";
-import { NewChat } from "@/components/new-chat";
+import { Chat } from "@/components/chat";
 import { useEffect, useState } from "react";
 import { Conversation, StoredChatMessage } from "@/types/types";
-import { Timestamp } from "@google-cloud/firestore";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { firestoreDb } from "@/lib/frontend/Firebase";
@@ -73,12 +71,11 @@ export default function ChatPage() {
       }}
     >
       {conversation && (
-        <NewChat
+        <Chat
           sendChatMessage={sendChatMessage}
           conversation={conversation}
-        ></NewChat>
+        ></Chat>
       )}
-      {/*<GCChatProvider></GCChatProvider>*/}
     </div>
   );
 }

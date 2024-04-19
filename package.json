@@ -10,9 +10,6 @@
     "emulator": "firebase emulators:start --only firestore,storage,auth,functions,pubsub --import=./emulator-data --export-on-exit"
   },
   "dependencies": {
-    "@chatscope/chat-ui-kit-react": "^2.0.3",
-    "@chatscope/chat-ui-kit-styles": "^1.4.0",
-    "@chatscope/use-chat": "^3.1.2",
     "axios": "^1.6.8",
     "firebase": "^10.10.0",
     "firebase-admin": "^12.0.0",

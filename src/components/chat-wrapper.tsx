@@ -1,4 +1,4 @@
-import { NewChat } from "@/components/new-chat";
+import { Chat } from "@/components/chat";
 import { useEffect, useState } from "react";
 import { Conversation } from "@/types/types";
 import { Timestamp } from "@google-cloud/firestore";
@@ -94,12 +94,12 @@ export function ChatWrapper() {
   }
 
   return (
-    <NewChat
+    <Chat
       conversation={conversation}
       sendChatMessage={async (message) => {
         console.log("send", message);
         return;
       }}
-    ></NewChat>
+    ></Chat>
   );
 }

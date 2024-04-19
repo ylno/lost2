@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { frontendService } from "@/lib/frontend/FrontendService";
-import { NewChat } from "@/components/new-chat";
-import { ChatWrapper } from "@/components/chat-wrapper";
 
 export default function Home() {
   const router = useRouter();
@@ -58,7 +56,7 @@ export default function Home() {
         <input onChange={(e) => setCode(e.target.value)} />
         <button onClick={sendCode}>send</button>
       </div>
-      <ChatWrapper></ChatWrapper>
+      {/*<ChatWrapper></ChatWrapper>*/}
     </div>
   );
 }
