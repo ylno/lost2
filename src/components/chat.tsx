@@ -3,7 +3,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { Conversation } from "@/types/types";
 import { FaRegPaperPlane, FaLocationDot, FaCamera } from "react-icons/fa6";
 
-
 type ChatParameter = {
   sendChatMessage: (message: string) => Promise<void>;
   conversation: Conversation;
