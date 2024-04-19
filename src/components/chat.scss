@@ -120,6 +120,7 @@ body, html {
 }
 
 .chat {
+	min-width: 400px;
 	position: relative;
 	display: flex;
 	flex-direction: column;
