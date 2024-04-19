@@ -41,7 +41,6 @@ body, html {
 	margin-bottom: 1rem;
 	padding-left: 5rem;
 	height: 4.5rem;
-
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -70,7 +69,6 @@ body, html {
 		font-size: 0.9rem;
 		padding-top: 0.125rem;
 		border-radius: 1rem;
-
 		top: 0;
 		left: 2.5rem;
 		background: $text-1;
@@ -83,15 +81,12 @@ body, html {
 	top: 50%;
 	left: 0;
 	transform: translate(-6rem, -50%);
-
 	width: 24rem;
 	height: 32rem;
 	padding: 1rem 2rem 1rem 1rem;
 	box-sizing: border-box;
 	border-radius: 1rem 0 0 1rem;
-
 	cursor: pointer;
-
 	background: white;
 	box-shadow:
 			0 0 8rem 0 rgba(black, 0.1),
@@ -143,7 +138,7 @@ body, html {
 	.contact.bar {
 		flex-basis: 3.5rem;
 		flex-shrink: 0;
-		margin: 1rem;
+		margin: 1rem 1.5rem;
 		box-sizing: border-box;
 	}
 
@@ -233,10 +228,13 @@ body, html {
 			width: 100%;
 
 			.form-item {
-				border-radius: 1.125rem;
-				border: 1px solid $text-3;
-				padding: 0.5rem 1rem;
+				border-radius: 5rem;
+				border: none;
 				height: 40px;
+				width: 40px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 
 				&.send {
 					background: $primary;
@@ -246,20 +244,14 @@ body, html {
 			}
 		}
 
-		input {
-			border:none;
+		.msg-input {
 			background-image:none;
 			background-color: white;
 			padding: 0.5rem 1rem;
 			border-radius: 1.125rem;
-			border: 1px solid $text-3
-		;
+			border: 1px solid $text-3;
 			flex-grow: 2;
-			box-shadow:
-					0 0 1rem rgba(black, 0.1),
-					0rem 1rem 1rem -1rem rgba(black, 0.2);
-
-			font-family: Red hat Display, sans-serif;
+			font-family: "Red hat Display", sans-serif;
 			font-weight: 400;
 			letter-spacing: 0.025em;
 
