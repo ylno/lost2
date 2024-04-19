@@ -7,6 +7,7 @@ import { Timestamp } from "@google-cloud/firestore";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { firestoreDb } from "@/lib/frontend/Firebase";
+import { nanoid } from "nanoid";
 
 const emptyConversation: Conversation = {
   chatOwner: {
@@ -58,6 +59,10 @@ export default function ChatPage() {
     return () => unsubscribe();
   }, []);
 
+  async function sendChatMessage(message: string) {
+    return frontendService.sendChatMessage(message, nanoid());
+  }
+
   return (
     <div
       style={{
@@ -69,7 +74,7 @@ export default function ChatPage() {
     >
       {conversation && (
         <NewChat
-          sendChatMessage={async (message) => {}}
+          sendChatMessage={sendChatMessage}
           conversation={conversation}
         ></NewChat>
       )}
