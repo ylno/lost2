@@ -1,8 +1,7 @@
 import "./chat.scss";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Conversation } from "@/types/types";
 import { FaRegPaperPlane, FaLocationDot, FaCamera } from "react-icons/fa6";
-
 
 type ChatParameter = {
   sendChatMessage: (message: string) => Promise<void>;
@@ -12,17 +11,23 @@ type ChatParameter = {
 export function Chat({ sendChatMessage, conversation }: ChatParameter) {
   const [message, setMessage] = useState("");
   const [firstDate, setFirstDate] = useState<Date | null>();
+  const chatAreaRef = useRef<HTMLDivElement>(null);
 
   async function submitForm(e: FormEvent) {
     console.log("formevent", e);
     e.preventDefault();
-    await sendChatMessage(message);
-    setMessage("");
+    if (message) {
+      await sendChatMessage(message);
+      setMessage("");
+    }
   }
 
   useEffect(() => {
     if (conversation.messages.length > 0) {
       setFirstDate(new Date(conversation.messages[0].created.toDate()));
+    }
+    if (chatAreaRef && chatAreaRef.current) {
+      chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }
   }, [conversation]);
 
@@ -38,7 +43,7 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
           ></div>
           <div className="name">{conversation.chatPartner.name}</div>
         </div>
-        <div className="messages" id="chat">
+        <div className="messages" id="chat" ref={chatAreaRef}>
           {firstDate && (
             <div className="time">{firstDate.toLocaleString()}</div>
           )}
@@ -76,7 +81,6 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
               <FaRegPaperPlane />
             </button>
           </form>
-          <i className="fas fa-microphone"></i>
         </div>
       </div>
     </div>
