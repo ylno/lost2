@@ -13,3 +13,15 @@ export type StoredChatMessage = {
   created: Timestamp;
   message: string;
 };
+
+export type Conversation = {
+  messages: StoredChatMessage[];
+  chatOwner: Person;
+  chatPartner: Person;
+};
+
+export type Person = {
+  id: string;
+  name: string;
+  avatar: string;
+};
