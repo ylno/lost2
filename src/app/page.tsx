@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import "./page.scss";
+import { FaRegPaperPlane } from "react-icons/fa6";
 
 export default function Home() {
   const router = useRouter();
@@ -53,12 +54,18 @@ export default function Home() {
   return (
     <div className="wrapper">
       <div className="card">
-        Enter start code or your already started session code
-        <div>
-          <input onChange={(e) => setCode(e.target.value)} />
-          <button onClick={sendCode}>send</button>
+        <div className="card-element">
+          Enter start code or your already started session code
         </div>
-        {/*<ChatWrapper></ChatWrapper>*/}
+        <div className="card-element form">
+          <input
+            className="msg-input"
+            onChange={(e) => setCode(e.target.value)}
+          />
+          <button className={"form-item send"} onClick={sendCode}>
+            <FaRegPaperPlane />
+          </button>
+        </div>
       </div>
     </div>
   );

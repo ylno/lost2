@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Red+Hat+Display:400,500,900&display=swap');
+
 
 $primary: #009EBF;
 $text-1: #333;
@@ -277,14 +277,6 @@ body, html {
 	}
 }
 
-// Obviously in a real app I would load this from a DB with JS
-// For now this is a nice quick and easy method to mockup
-
-.pic.stark { background-image: url('/tim.svg')}
-.pic.banner { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/4/4f/BruceHulk-Endgame-TravelingCapInPast.jpg')}
-.pic.thor { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/9/98/ThorFliesThroughTheAnus.jpg')}
-.pic.danvers { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/0/05/HeyPeterParker.png')}
-.pic.rogers { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/7c/Cap.America_%28We_Don%27t_Trade_Lives_Vision%29.png')}
 
 
 @media screen AND (max-width: 1024px) {
