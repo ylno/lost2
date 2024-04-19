@@ -22,7 +22,8 @@ const emptyConversation: Conversation = {
 };
 
 export default function ChatPage() {
-  const [conversation, setConversation] = useState<Conversation>();
+  const [conversation, setConversation] =
+    useState<Conversation>(emptyConversation);
 
   useEffect(() => {
     const conv = emptyConversation;
