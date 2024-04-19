@@ -48,7 +48,14 @@ export default function Home() {
   }
 
   if (loading) {
-    return <div>loading...</div>;
+    return (
+      <div className="wrapper">
+        <div className="card">
+          <div className="card-element">loading...</div>
+          <div className="card-element form"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
