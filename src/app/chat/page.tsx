@@ -41,7 +41,6 @@ export default function ChatPage() {
     const unsubscribe = onSnapshot(queryRef, (snapshot) => {
       const newMessages: StoredChatMessage[] = [];
       snapshot.docChanges().forEach((change) => {
-        console.log("mfd added", change);
         if (change.type == "added") {
           newMessages.push(change.doc.data() as StoredChatMessage);
         }
