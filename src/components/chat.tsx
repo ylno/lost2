@@ -56,15 +56,19 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
           {/*</div>*/}
         </div>
         <div className="input">
-          <i className="fas fa-camera"></i>
-          <i className="far fa-laugh-beam"></i>
-          <form onSubmit={submitForm}>
+
+
+          <form className={"form"}onSubmit={submitForm}>
+            <button className={"form-item image"}><i className="fas fa-camera"></i></button>
+            <button className={"form-item location"}><i className="fas fa-location-dot"></i></button>
             <input
+                className={"form-item"}
               value={message}
               placeholder="Type your message here!"
               type="text"
               onChange={(e) => setMessage(e.target.value)}
             />
+              <button className={"form-item send"}>Send</button>
           </form>
           <i className="fas fa-microphone"></i>
         </div>

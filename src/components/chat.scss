@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Red+Hat+Display:400,500,900&display=swap');
 
+$primary: #009EBF;
 $text-1: #333;
 $text-2: #666;
 $text-3: #999;
 $line: #CCC;
 $time-bg: #EEE;
 $background: #F7F7F7;
+$backgroundimage: "https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2670";
 
 body, html {
 	font-family: Red hat Display, sans-serif;
@@ -14,13 +16,16 @@ body, html {
 	letter-spacing: 0.025em;
 	color: $text-1;
 	background: $background;
+	background-image: url($backgroundimage);
+	background-size: cover;
 }
 
 .center {
-	position: absolute;
-	top: 50%;
-	left: calc(50% + 12rem);
-	transform: translate(-50%, -50%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
 }
 
 .pic {
@@ -121,13 +126,11 @@ body, html {
 
 .chat {
 	position: relative;
-
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-
-	width: 24rem;
-	height: 38rem;
+	width: 32rem;
+	height: 48rem;
 	z-index: 2;
 	box-sizing: border-box;
 	border-radius: 1rem;
@@ -221,13 +224,36 @@ body, html {
 			}
 		}
 
+		.form {
+
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 0.3rem;
+			width: 100%;
+
+			.form-item {
+				border-radius: 1.125rem;
+				border: 1px solid $text-3;
+				padding: 0.5rem 1rem;
+				height: 40px;
+
+				&.send {
+					background: $primary;
+					color: #fff;
+					border: none;
+				}
+			}
+		}
+
 		input {
 			border:none;
 			background-image:none;
 			background-color: white;
 			padding: 0.5rem 1rem;
-			margin-right: 1rem;
 			border-radius: 1.125rem;
+			border: 1px solid $text-3
+		;
 			flex-grow: 2;
 			box-shadow:
 					0 0 1rem rgba(black, 0.1),
@@ -265,3 +291,13 @@ body, html {
 .pic.thor { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/9/98/ThorFliesThroughTheAnus.jpg')}
 .pic.danvers { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/0/05/HeyPeterParker.png')}
 .pic.rogers { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/7c/Cap.America_%28We_Don%27t_Trade_Lives_Vision%29.png')}
+
+
+@media screen AND (max-width: 1024px) {
+	.chat {
+		height: 100vh;
+		width: 100vw;
+		border-radius: 0;
+	}
+
+}
