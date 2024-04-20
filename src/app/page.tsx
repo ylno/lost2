@@ -25,6 +25,13 @@ export default function Home() {
   }
 
   useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      console.log("service worker");
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/service-worker.js");
+      });
+    }
+
     const sessionId = localStorage.getItem("cacheSession");
     console.log("sessionid from loacalstorage", {
       sessionId: sessionId,
