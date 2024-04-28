@@ -1,4 +1,3 @@
-"use client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { apiService } from "@/services/api/ApiService";
 
