@@ -1,18 +1,22 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import "./page.scss";
 import { FaRegPaperPlane } from "react-icons/fa6";
+import { Spinner } from "@/components/spinner";
+import styled from "styled-components";
 
 export default function Home() {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   async function checkSession() {
     const sessionId = localStorage.getItem("cacheSession");
-    console.log("sessionid from loacalstorage", sessionId);
+    console.log("sessionid from localstorage", sessionId);
     if (!sessionId) {
       throw new Error("no_session");
     }
@@ -30,6 +34,7 @@ export default function Home() {
       sessionId: sessionId,
       code: code,
     });
+    setError("");
 
     checkSession()
       .then(() => {
@@ -40,11 +45,35 @@ export default function Home() {
       });
   }, []);
 
+  useEffect(() => {
+    setError("");
+  }, [code]);
+
   async function sendCode() {
-    const cacheSession = await frontendService.startCacheSession(code);
-    if (cacheSession) {
-      router.push("/chat");
+    if (!code) {
+      setError("Please Enter a code");
+      return;
     }
+    try {
+      setError("");
+      setSubmitting(true);
+      const cacheSession = await frontendService.startCacheSession(code);
+      console.log("cachesession", cacheSession);
+      if (cacheSession) {
+        router.push("/chat");
+      }
+    } catch (e) {
+      console.log("error", e);
+      setError("No session found with this code");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function submitForm(e: FormEvent) {
+    console.log("formevent", e);
+    e.preventDefault();
+    await sendCode();
   }
 
   if (loading) {
@@ -64,16 +93,24 @@ export default function Home() {
         <div className="card-element">
           Enter start code or your already started session code
         </div>
-        <div className="card-element form">
+        <form className="card-element form" onSubmit={submitForm}>
           <input
             className="msg-input"
             onChange={(e) => setCode(e.target.value)}
+            disabled={submitting}
           />
-          <button className={"form-item send"} onClick={sendCode}>
-            <FaRegPaperPlane />
+          <button className={"form-item send"} disabled={submitting}>
+            {!submitting ? <FaRegPaperPlane /> : <Spinner />}
           </button>
-        </div>
+        </form>
+        <ErrorMessage className="card-element">{error}</ErrorMessage>
       </div>
     </div>
   );
 }
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-weight: bold;
+  min-height: 20px;
+`;

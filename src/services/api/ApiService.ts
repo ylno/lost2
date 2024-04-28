@@ -62,9 +62,14 @@ export class ApiService {
       throw new Error("empty id");
     }
     const documentReference = firestore.collection("cache-sessions").doc(id);
+    const documentSnapshot = await documentReference.get();
+    if (!documentSnapshot.exists) {
+      console.log("now such document");
+      return null;
+    }
     const data = {
       id: documentReference.id,
-      ...(await documentReference.get()).data(),
+      ...documentSnapshot.data(),
     } as CacheSession;
     return data;
   }
