@@ -37,14 +37,16 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
   return (
     <div className="center">
       <div className="chat">
-        <div className="contact bar">
-          <div
-            className="pic"
-            style={{
-              backgroundImage: `url("${conversation.chatPartner.avatar}")`,
-            }}
-          ></div>
-          <div className="name">{conversation.chatPartner.name}</div>
+        <div className="contact-wrapper">
+          <div className="contact bar">
+            <div
+              className="pic"
+              style={{
+                backgroundImage: `url("${conversation.chatPartner.avatar}")`,
+              }}
+            ></div>
+            <div className="name">{conversation.chatPartner.name}</div>
+          </div>
         </div>
         <div className="messages" id="chat" ref={chatAreaRef}>
           {firstDate && (
