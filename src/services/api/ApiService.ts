@@ -98,6 +98,7 @@ export class ApiService {
       });
       const chatDocument = documentReference.collection("chat").doc();
       await chatDocument.set({
+        id: chatDocument.id,
         sender: "Tim",
         message: `Hallo, mein Name ist Tim. Meine Schwester ist entführt worden. Kannst du mir helfen sie zu finden? Hast du noch Freunde, die uns bei der Suche helfen können? Gib ihnen den Einstiegscode "${documentReference.id}" weiter, damit Sie hier untertützen können.`,
         created: new Date(),
@@ -137,7 +138,10 @@ export class ApiService {
         console.log("new state", state);
       });
 
-      await sessionDocumentReference.collection("chat").doc().set({
+      const userDocumentReference = sessionDocumentReference
+        .collection("chat")
+        .doc(id);
+      await userDocumentReference.set({
         id: id,
         sender: "You",
         message: message,
@@ -152,8 +156,11 @@ export class ApiService {
       const sendAnswer = meta[`chat.${snapshot.value}`].message;
       console.log(sendAnswer);
 
-      await sessionDocumentReference.collection("chat").doc().set({
-        id: id,
+      const documentReference = sessionDocumentReference
+        .collection("chat")
+        .doc();
+      await documentReference.set({
+        id: documentReference.id,
         sender: "Tim",
         message: sendAnswer,
         created: new Date(),
