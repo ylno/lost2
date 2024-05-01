@@ -2,6 +2,7 @@ import { firestore } from "@/lib/backend/FirebaseAdmin";
 import { createActor, createMachine } from "xstate";
 import { CacheSession } from "@/types/types";
 import { stateMachine } from "@/services/api/StateMachine";
+import { stageChecks } from "@/services/api/StageLogic";
 
 export class ApiService {
   async getSession(id: string) {
@@ -48,7 +49,7 @@ export class ApiService {
       await chatDocument.set({
         id: chatDocument.id,
         sender: "Tim",
-        message: `Hallo, mein Name ist Tim. Meine Schwester ist entführt worden. Kannst du mir helfen sie zu finden? Hast du noch Freunde, die uns bei der Suche helfen können? Gib ihnen den Einstiegscode "${documentReference.id}" weiter, damit Sie hier untertützen können.`,
+        message: `Hallo, mein Name ist Tim. Meine Schwester ist entführt worden. Kannst du mir helfen sie zu finden? Hast du noch Freunde, die uns bei der Suche helfen können? Gib ihnen den Einstiegscode "${documentReference.id}" weiter, damit Sie hier untertützen können.\nWas ist 2+2?`,
         created: new Date(),
       });
 
@@ -96,13 +97,23 @@ export class ApiService {
         created: new Date(),
       });
 
-      actor.send({ type: "CORRECT_ANSWER" });
+      const snapshotBefore = actor.getSnapshot();
+      if (message.toLowerCase() === "hilfe") {
+        console.log("HILFE");
+        actor.send({ type: "HELP" });
+      } else if (
+        stageChecks[`${snapshotBefore.value}`].checkCorrectAnswer(message)
+      ) {
+        console.log("Correct answer");
+        actor.send({ type: "CORRECT_ANSWER" });
+      } else {
+        console.log("wrong answer");
+        actor.send({ type: "WRONG_ANSWER" });
+      }
 
       const snapshot = actor.getSnapshot();
-      const meta = snapshot.getMeta();
-      console.log(meta);
-      const sendAnswer = meta[`chat.${snapshot.value}`].message;
-      console.log(sendAnswer);
+      const sendAnswer = snapshot.context.answer;
+      console.log("will send this answer: ", sendAnswer);
 
       const documentReference = sessionDocumentReference
         .collection("chat")
@@ -110,7 +121,7 @@ export class ApiService {
       await documentReference.set({
         id: documentReference.id,
         sender: "Tim",
-        message: sendAnswer,
+        message: sendAnswer || "Error",
         created: new Date(),
       });
 
