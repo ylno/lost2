@@ -25,7 +25,7 @@ describe("test state machine", () => {
     const snapshot = actor.getSnapshot();
     const sendAnswer = snapshot.context.answer;
     expect(sendAnswer).toBe(
-      "Das war leider falsch. Versuchen Sie es nochmal: Was ist 2+2?",
+      "Das war leider falsch. Versuche es nochmal: Was ist 2+2?",
     );
   });
 
@@ -37,7 +37,7 @@ describe("test state machine", () => {
     const snapshot = actor.getSnapshot();
     console.log("context", snapshot.context);
     const sendAnswer = snapshot.context.answer;
-    expect(sendAnswer).toBe("Hilfe der Stufe 1");
+    expect(sendAnswer).toBe("Stage1 Hilfe der Stufe 1");
     expect(snapshot.context.helpLevel).toEqual(1);
   });
 });
