@@ -4,6 +4,7 @@ import { getFirestore } from "firebase-admin/firestore";
 if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
   throw new Error("no service account");
 }
+console.log("env backend", JSON.stringify(process.env.FIRESTORE_EMULATOR_HOST));
 let app: admin.app.App;
 if (admin.apps.length === 0) {
   // Keine App ist initialisiert

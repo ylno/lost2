@@ -12,14 +12,20 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
   const [message, setMessage] = useState("");
   const [firstDate, setFirstDate] = useState<Date | null>();
   const chatAreaRef = useRef<HTMLDivElement>(null);
+  const [sending, setSending] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   async function submitForm(e: FormEvent) {
     console.log("formevent", e);
     e.preventDefault();
     if (message) {
+      setSending(true);
       await sendChatMessage(message);
       setMessage("");
+      setSending(false);
     }
+    // needs timeout because field is inactive
+    setTimeout(() => inputRef?.current?.focus(), 10);
   }
 
   useEffect(() => {
@@ -31,17 +37,24 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
     }
   }, [conversation]);
 
+  useEffect(() => {
+    // Fokusieren des Input-Elements, wenn die Komponente geladen wird
+    inputRef.current?.focus();
+  }, []);
+
   return (
     <div className="center">
       <div className="chat">
-        <div className="contact bar">
-          <div
-            className="pic"
-            style={{
-              backgroundImage: `url("${conversation.chatPartner.avatar}")`,
-            }}
-          ></div>
-          <div className="name">{conversation.chatPartner.name}</div>
+        <div className="contact-wrapper">
+          <div className="contact bar">
+            <div
+              className="pic"
+              style={{
+                backgroundImage: `url("${conversation.chatPartner.avatar}")`,
+              }}
+            ></div>
+            <div className="name">{conversation.chatPartner.name}</div>
+          </div>
         </div>
         <div className="messages" id="chat" ref={chatAreaRef}>
           {firstDate && (
@@ -71,13 +84,15 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
               <FaLocationDot />
             </button>
             <input
+              ref={inputRef}
+              disabled={sending}
               className={"msg-input"}
               value={message}
               placeholder="Type your message here!"
               type="text"
               onChange={(e) => setMessage(e.target.value)}
             />
-            <button className={"form-item send"}>
+            <button className={"form-item send"} disabled={sending}>
               <FaRegPaperPlane />
             </button>
           </form>

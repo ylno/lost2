@@ -24,6 +24,22 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+### Use firebase emulator for local development
+
+Add this entries to your .env.local file
+
+```
+NEXT_PUBLIC_FIREBASE_EMULATOR_HOST=localhost
+NEXT_PUBLIC_EMULATOR=true
+NEXT_PUBLIC_FIRESTORE_EMULATOR_PORT=8080
+NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_PORT=9099
+NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_PORT=9199
+```
+
+Start the emulator suite:
+`npm run emulator` and, in another terminal window `npm run dev`
+
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
