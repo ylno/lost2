@@ -28,4 +28,16 @@ describe("test state machine", () => {
       "Das war leider falsch. Versuchen Sie es nochmal: Was ist 2+2?",
     );
   });
+
+  it("help message", () => {
+    const actor = createActor(stateMachine);
+    actor.start();
+    actor.send({ type: "HELP", helpLevel: 0 });
+
+    const snapshot = actor.getSnapshot();
+    console.log("context", snapshot.context);
+    const sendAnswer = snapshot.context.answer;
+    expect(sendAnswer).toBe("Hilfe der Stufe 1");
+    expect(snapshot.context.helpLevel).toEqual(1);
+  });
 });

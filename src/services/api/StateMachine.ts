@@ -9,6 +9,7 @@ export const stateMachine = createMachine({
   initial: "stage1",
   context: {
     answer: "",
+    helpLevel: 0,
   },
   states: {
     stage1: {
@@ -18,6 +19,7 @@ export const stateMachine = createMachine({
           actions: assign({
             answer: ({ event }) =>
               "Richtig! Nächste Frage: (Stage 2) Nenne die Hauptstadt von Deutschland.",
+            helpLevel: () => 0,
           }),
         },
         WRONG_ANSWER: {
@@ -26,6 +28,29 @@ export const stateMachine = createMachine({
               "Das war leider falsch. Versuchen Sie es nochmal: Was ist 2+2?", // Nachricht für falsche Antwort
           }),
         },
+        HELP: {
+          actions: assign({
+            answer: ({ event }) => {
+              console.log("inside help: event", event.helpLevel);
+              return [
+                "Hilfe der Stufe 1",
+                "Stufe 2",
+                "Stufe 3",
+                "Stufe 4",
+                "Stufe 5",
+              ][event.helpLevel && event.helpLevel >= 0 ? event.helpLevel : 0];
+            },
+            helpLevel: ({ event }) => {
+              const helpLevel = event.helpLevel ? event.helpLevel : 0;
+              console.log("helplevel event", helpLevel);
+              helpLevel;
+              return helpLevel < 4 ? helpLevel + 1 : helpLevel;
+            },
+          }),
+        },
+      },
+      meta: {
+        helpLevel: 0,
       },
     },
     stage2: {
@@ -35,6 +60,7 @@ export const stateMachine = createMachine({
           actions: assign({
             answer: ({ event }) =>
               "Richtig. Die Hauptstadt ist Berlin. Wie ist mein Name?",
+            helpLevel: () => 0,
           }),
         },
         WRONG_ANSWER: {
@@ -44,6 +70,29 @@ export const stateMachine = createMachine({
               "Das war leider falsch. Versuchen Sie es nochmal: Wie heißt die Hauptstadt von Deutschland?",
           }),
         },
+        HELP: {
+          actions: assign({
+            answer: ({ event }) => {
+              console.log("inside help: event", event.helpLevel);
+              return [
+                "Hilfe der Stufe 1",
+                "Stufe 2",
+                "Stufe 3",
+                "Stufe 4",
+                "Stufe 5",
+              ][event.helpLevel && event.helpLevel >= 0 ? event.helpLevel : 0];
+            },
+            helpLevel: ({ event }) => {
+              const helpLevel = event.helpLevel ? event.helpLevel : 0;
+              console.log("helplevel event", helpLevel);
+              helpLevel;
+              return helpLevel < 4 ? helpLevel + 1 : helpLevel;
+            },
+          }),
+        },
+      },
+      meta: {
+        helpLevel: 0,
       },
     },
     stage3: {
@@ -52,6 +101,7 @@ export const stateMachine = createMachine({
           target: "success",
           actions: assign({
             answer: ({ event }) => "Richtig! Geschafft",
+            helpLevel: () => 0,
           }),
         },
         WRONG_ANSWER: {
@@ -61,18 +111,31 @@ export const stateMachine = createMachine({
               "Nein, das ist nicht mein Name. Versuch es nochmal",
           }),
         },
+        HELP: {
+          actions: assign({
+            answer: ({ event }) => {
+              console.log("inside help: event", event.helpLevel);
+              return [
+                "Hilfe der Stufe 1",
+                "Stufe 2",
+                "Stufe 3",
+                "Stufe 4",
+                "Stufe 5",
+              ][event.helpLevel && event.helpLevel >= 0 ? event.helpLevel : 0];
+            },
+            helpLevel: ({ event }) => {
+              const helpLevel = event.helpLevel ? event.helpLevel : 0;
+              console.log("helplevel event", helpLevel);
+              helpLevel;
+              return helpLevel < 4 ? helpLevel + 1 : helpLevel;
+            },
+          }),
+        },
+      },
+      meta: {
+        helpLevel: 0,
       },
     },
-    // stage1: {
-    //   on: {
-    //     CORRECT_ANSWER: "stage2",
-    //     WRONG_ANSWER: "stage1",
-    //   },
-    //   meta: {
-    //     message: "Willkommen im Chat! (Stage 1) Was ist 2+2?",
-    //   },
-    // },
-
     success: {
       type: "final",
       meta: {

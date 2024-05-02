@@ -83,9 +83,9 @@ export class ApiService {
       }).start();
       console.log("actor restored");
 
-      actor.subscribe((state) => {
-        console.log("new state", state);
-      });
+      // actor.subscribe((state) => {
+      //   console.log("new state", state);
+      // });
 
       const userDocumentReference = sessionDocumentReference
         .collection("chat")
@@ -98,9 +98,13 @@ export class ApiService {
       });
 
       const snapshotBefore = actor.getSnapshot();
+      console.log("message", message.toLowerCase());
       if (message.toLowerCase() === "hilfe") {
         console.log("HILFE");
-        actor.send({ type: "HELP" });
+        actor.send({
+          type: "HELP",
+          helpLevel: snapshotBefore.context.helpLevel,
+        });
       } else if (
         stageChecks[`${snapshotBefore.value}`].checkCorrectAnswer(message)
       ) {

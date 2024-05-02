@@ -13,6 +13,7 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
   const [firstDate, setFirstDate] = useState<Date | null>();
   const chatAreaRef = useRef<HTMLDivElement>(null);
   const [sending, setSending] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   async function submitForm(e: FormEvent) {
     console.log("formevent", e);
@@ -23,6 +24,8 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
       setMessage("");
       setSending(false);
     }
+    // needs timeout because field is inactive
+    setTimeout(() => inputRef?.current?.focus(), 10);
   }
 
   useEffect(() => {
@@ -33,6 +36,11 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
       chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }
   }, [conversation]);
+
+  useEffect(() => {
+    // Fokusieren des Input-Elements, wenn die Komponente geladen wird
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <div className="center">
@@ -76,6 +84,7 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
               <FaLocationDot />
             </button>
             <input
+              ref={inputRef}
               disabled={sending}
               className={"msg-input"}
               value={message}
