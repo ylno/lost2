@@ -1,7 +1,8 @@
 import "./chat.scss";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Conversation } from "@/types/types";
 import { FaRegPaperPlane, FaLocationDot, FaCamera } from "react-icons/fa6";
+import { Spinner } from "@/components/spinner";
 
 type ChatParameter = {
   sendChatMessage: (message: string) => Promise<void>;
@@ -12,8 +13,8 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
   const [message, setMessage] = useState("");
   const [firstDate, setFirstDate] = useState<Date | null>();
   const chatAreaRef = useRef<HTMLDivElement>(null);
-  const [sending, setSending] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [sending, setSending] = useState(false);
 
   async function submitForm(e: FormEvent) {
     console.log("formevent", e);
@@ -93,7 +94,7 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
               onChange={(e) => setMessage(e.target.value)}
             />
             <button className={"form-item send"} disabled={sending}>
-              <FaRegPaperPlane />
+              {!sending ? <FaRegPaperPlane /> : <Spinner />}
             </button>
           </form>
         </div>
