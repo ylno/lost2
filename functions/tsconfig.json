@@ -6,10 +6,21 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@shared-services/*": [
+        "../packages/shared-services/src/*"
+      ]
+    }
   },
   "compileOnSave": true,
   "include": [
-    "src"
-  ]
+    "src",
+    "../packages/shared-services/src"
+  ],
+
 }

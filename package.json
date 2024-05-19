@@ -10,6 +10,10 @@
     "emulator": "firebase emulators:start --only firestore,storage,auth,functions,pubsub --import=./emulator-data --export-on-exit",
     "test": "jest"
   },
+  "workspaces": [
+    "functions",
+    "packages/shared-services"
+  ],
   "dependencies": {
     "axios": "^1.6.8",
     "firebase": "^10.10.0",

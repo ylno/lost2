@@ -1,30 +1,32 @@
 import { assign, createMachine } from "xstate";
 import { StateMachineDefinition } from "@/services/api/StageLogic";
 
+type AnswerEvent = { helpLevel: number };
+
 const states = StateMachineDefinition.reduce((acc, state) => {
   acc[state.state] = {
     on: {
       CORRECT_ANSWER: {
         target: state.target,
         actions: assign({
-          answer: ({ event }) => state.messageCorrect,
+          answer: (event: AnswerEvent) => state.messageCorrect,
           helpLevel: () => 0,
         }),
       },
       WRONG_ANSWER: {
         actions: assign({
-          answer: ({ event }) => state.messageWrong,
+          answer: (event: AnswerEvent) => state.messageWrong,
         }),
       },
       HELP: {
         actions: assign({
-          answer: ({ event }) => {
-            console.log("inside help: event", event.helpLevel);
+          answer: (event: AnswerEvent) => {
+            console.log("inside help: event", event?.helpLevel);
             return state.helpMessages[
               event.helpLevel && event.helpLevel >= 0 ? event.helpLevel : 0
             ];
           },
-          helpLevel: ({ event }) => {
+          helpLevel: (event: AnswerEvent) => {
             const helpLevel = event.helpLevel ? event.helpLevel : 0;
             console.log("helplevel event", helpLevel);
             helpLevel;
