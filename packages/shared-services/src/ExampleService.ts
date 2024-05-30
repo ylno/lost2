@@ -1,7 +1,9 @@
-// src/ExampleService.ts
+/**
+ * Exampleservice
+ */
 export class ExampleService {
   public getData(): string {
-    return "Hello from Shared Services!";
+    return "Hello from Shared Services!!";
   }
 }
 
