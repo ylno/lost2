@@ -11,7 +11,8 @@
     "test": "jest"
   },
   "workspaces": [
-    "packages/shared-services"
+    "packages/shared-services",
+    "functions"
   ],
   "dependencies": {
     "axios": "^1.6.8",
