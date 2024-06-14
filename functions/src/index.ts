@@ -15,6 +15,6 @@ import { exampleService } from "@shared-services/ExampleService";
 // https://firebase.google.com/docs/functions/typescript
 
 export const helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", { structuredData: true });
+  logger.info("Hello logs123!");
   response.send("Hello from Firebase! and" + exampleService.getData());
 });

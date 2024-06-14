@@ -6,7 +6,7 @@ const rebuild = () => {
 	build(buildOptions).catch(() => process.exit(1));
 };
 
-chokidar.watch('src/**/*').on('all', (event, path) => {
+chokidar.watch(['src/**/*', '../packages/shared-services/**/*']).on('all', (event, path) => {
 	console.log(`${event} detected in ${path}. Rebuilding...`);
 	rebuild();
 });

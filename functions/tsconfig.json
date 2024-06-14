@@ -13,14 +13,14 @@
         "./src/*"
       ],
       "@shared-services/*": [
-        "./src/shared-services/*"
+        "../packages/shared-services/src/*"
       ]
     }
   },
   "compileOnSave": true,
   "include": [
     "src",
-//    "../packages/shared-services/src"
+    "../packages/shared-services/src"
   ],
 
 }
