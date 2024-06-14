@@ -6,8 +6,8 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { frontendService } from "@/lib/frontend/FrontendService";
 import { firestoreDb } from "@/lib/frontend/Firebase";
 import { nanoid } from "nanoid";
-import { router } from "next/client";
 import { useRouter } from "next/navigation";
+import { exampleService } from "@shared-services/ExampleService";
 
 const emptyConversation: Conversation = {
   chatOwner: {
@@ -74,6 +74,7 @@ export default function ChatPage() {
         width: "100%",
       }}
     >
+      {exampleService.getData()}
       {conversation && (
         <Chat
           sendChatMessage={sendChatMessage}
