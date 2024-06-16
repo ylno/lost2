@@ -1,26 +1,26 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "outDir": "lib",
-    "sourceMap": true,
-    "strict": true,
-    "target": "es2017",
-    "baseUrl": "./",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@shared-services/*": [
-        "../packages/shared-services/src/*"
-      ]
-    }
-  },
-  "compileOnSave": true,
-  "include": [
-    "src",
-    "../packages/shared-services/src"
-  ],
-
+	"compilerOptions": {
+		"module": "commonjs",
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"outDir": "lib",
+		"sourceMap": true,
+		"strict": true,
+		"target": "es2017",
+		"baseUrl": "./",
+		"paths": {
+			"@/*": [
+				"./src/*"
+			],
+			"@shared-services/*": [
+				"../packages/shared-services/src/*"
+			]
+		}
+	},
+	"compileOnSave": true,
+	"include": [
+		"src",
+		"../packages/shared-services/src"
+	],
+	"exclude": ["functions"]
 }
