@@ -1,13 +1,8 @@
-import styled from "styled-components";
-
-const MailViewContainer = styled.div`
-  padding: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-`;
+import React from "react";
+import "./mailView.scss"; // Falls du separate CSS-Dateien verwenden möchtest
 
 const MailView: React.FC = () => (
-  <MailViewContainer>
+  <div className="mail-view-container">
     <h2>Mail Subject</h2>
     <p>Dear User,</p>
     <p>This is a static email content for demonstration purposes.</p>
@@ -16,7 +11,7 @@ const MailView: React.FC = () => (
       <br />
       Webmailer Team
     </p>
-  </MailViewContainer>
+  </div>
 );
 
 export default MailView;

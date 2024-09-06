@@ -1,0 +1,31 @@
+.compose-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.input {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.textarea {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	height: 200px;
+}
+
+.button {
+	padding: 10px 15px;
+	border: none;
+	background-color: #007bff;
+	color: white;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.button:hover {
+	background-color: #0056b3;
+}

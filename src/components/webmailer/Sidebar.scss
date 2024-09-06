@@ -1,0 +1,19 @@
+.sidebar-container {
+	width: 250px;
+	background-color: #333;
+	color: white;
+	padding: 20px;
+}
+
+.nav-item {
+	margin-bottom: 15px;
+}
+
+.nav-item a {
+	color: white;
+	text-decoration: none;
+}
+
+.nav-item a:hover {
+	text-decoration: underline;
+}

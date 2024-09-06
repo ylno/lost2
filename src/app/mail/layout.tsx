@@ -1,23 +1,12 @@
-import styled from "styled-components";
 import Sidebar from "@/components/webmailer/sidebar";
-
-const Container = styled.div`
-  display: flex;
-  height: 100vh;
-`;
-
-const Content = styled.div`
-  flex: 1;
-  padding: 20px;
-  background-color: white;
-  overflow-y: auto;
-`;
+import React from "react";
+import "./layout.scss"; // Falls du separate CSS-Dateien verwenden möchtest
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <Container>
+  <div className="container">
     <Sidebar />
-    <Content>{children}</Content>
-  </Container>
+    <div className="content">{children}</div>
+  </div>
 );
 
 export default Layout;

@@ -1,4 +1,3 @@
-"use client";
 import Composemail from "@/components/webmailer/composemail";
 
 export default function Compose() {

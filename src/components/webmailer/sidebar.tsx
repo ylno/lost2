@@ -1,39 +1,20 @@
-import styled from "styled-components";
 import Link from "next/link";
-
-const SidebarContainer = styled.div`
-  width: 250px;
-  background-color: #333;
-  color: white;
-  padding: 20px;
-`;
-
-const NavItem = styled.div`
-  margin-bottom: 15px;
-
-  a {
-    color: white;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-`;
+import React from "react";
+import "./Sidebar.scss"; // Falls du separate CSS-Dateien verwenden möchtest
 
 const Sidebar: React.FC = () => (
-  <SidebarContainer>
+  <div className="sidebar-container">
     <h2>Webmailer</h2>
-    <NavItem>
+    <div className="nav-item">
       <Link href="/mail">Inbox</Link>
-    </NavItem>
-    <NavItem>
-      <Link href="./sent">Sent</Link>
-    </NavItem>
-    <NavItem>
+    </div>
+    <div className="nav-item">
+      <Link href="/sent">Sent</Link>
+    </div>
+    <div className="nav-item">
       <Link href="/mail/compose">Compose</Link>
-    </NavItem>
-  </SidebarContainer>
+    </div>
+  </div>
 );
 
 export default Sidebar;
