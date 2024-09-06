@@ -1,9 +1,19 @@
-.mail-item {
+.mailItem {
 	padding: 10px;
 	border-bottom: 1px solid #ccc;
 	cursor: pointer;
+	display: flex;
 }
-
-.mail-item:hover {
+.mailItem:hover {
 	background-color: #f1f1f1;
 }
+
+.status {
+
+}
+
+.mailContainer {
+	flex-grow: 1;
+}
+
+
