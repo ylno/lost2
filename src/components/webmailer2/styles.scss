@@ -20,3 +20,11 @@ body {
 	color: #FFFFFF;
 }
 
+.btn-secondary {
+	background-color: #FFFFFF;
+	color: #292b2c;
+
+	&:hover {
+		background-color: #a3a4a4;
+	}
+}
