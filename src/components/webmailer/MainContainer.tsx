@@ -7,6 +7,7 @@ import { ActionsRow } from "@/components/webmailer/ActionRow";
 
 import "font-awesome/css/font-awesome.min.css";
 import "./styles.scss";
+import { emails } from "@/components/webmailer/data";
 
 /**
  * Main class which contains the labels and the email list.
@@ -21,50 +22,7 @@ export function MainContainer(props: {}) {
 
   const defaultProps = {
     //Emails to be displayed on the Email List
-    emails: [
-      {
-        id: 0,
-        labelId: 1,
-        from: "Mike James",
-        subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        time: "11:15",
-      },
-      {
-        id: 1,
-        labelId: 1,
-        from: "Emma Thompson",
-        subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        time: "22:08",
-      },
-      {
-        id: 2,
-        labelId: 1,
-        from: "Olivia Jefferson",
-        subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        time: "19:12",
-      },
-      {
-        id: 3,
-        labelId: 1,
-        from: "Mike Conley",
-        subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        time: "18:35",
-      },
-      {
-        id: 4,
-        labelId: 2,
-        from: "Emily Iverson",
-        subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        time: "14:05",
-      },
-      {
-        id: 5,
-        labelId: 3,
-        from: "Michael Neal",
-        subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        time: "14:05",
-      },
-    ],
+    emails: emails,
   };
 
   const filteredEmails = defaultProps.emails.filter(
