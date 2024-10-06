@@ -1,9 +1,7 @@
-import {
-  MainContainer,
-  NavBar,
-} from "@/components/webmailer2/WebmailerComponents";
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { MainContainer } from "@/components/webmailer/MainContainer";
+import { NavBar } from "@/components/webmailer/NavBar";
 
 export default function Page() {
   return (
