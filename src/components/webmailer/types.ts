@@ -4,4 +4,5 @@ export type Email = {
   subject: string;
   time: string;
   labelId: number;
+  content: string;
 };
