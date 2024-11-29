@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -25,6 +25,7 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
+import List from "@/components/mail/List";
 
 const navigation = [
   { name: "Inbox", href: "#", icon: InboxIcon, current: true, newBadge: 4 },
@@ -365,7 +366,9 @@ export default function Page() {
           </div>
 
           <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{/* Your content */}</div>
+            <div className="px-4 sm:px-6 lg:px-8">
+              <List />
+            </div>
           </main>
         </div>
       </div>
