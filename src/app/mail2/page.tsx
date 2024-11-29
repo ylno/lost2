@@ -27,10 +27,16 @@ import {
 } from "@heroicons/react/20/solid";
 
 const navigation = [
-  { name: "Inbox", href: "#", icon: InboxIcon, current: true },
-  { name: "Sent", href: "#", icon: PaperAirplaneIcon, current: false },
-  { name: "Draft", href: "#", icon: DocumentIcon, current: false },
-  { name: "Trash", href: "#", icon: TrashIcon, current: false },
+  { name: "Inbox", href: "#", icon: InboxIcon, current: true, newBadge: 4 },
+  {
+    name: "Sent",
+    href: "#",
+    icon: PaperAirplaneIcon,
+    current: false,
+    newBadge: 0,
+  },
+  { name: "Draft", href: "#", icon: DocumentIcon, current: false, newBadge: 0 },
+  { name: "Trash", href: "#", icon: TrashIcon, current: false, newBadge: 0 },
 ];
 const filters = [
   { id: 1, name: "Important", href: "#", initial: "I", current: false },
@@ -211,6 +217,11 @@ export default function Page() {
                             )}
                           />
                           {item.name}
+                          {item.newBadge > 0 && (
+                            <span className="inline-flex items-center rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                              {item.newBadge}
+                            </span>
+                          )}
                         </a>
                       </li>
                     ))}
@@ -317,7 +328,7 @@ export default function Page() {
                     <span className="sr-only">Open user menu</span>
                     <img
                       alt=""
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      src="tim.svg"
                       className="size-8 rounded-full bg-gray-50"
                     />
                     <span className="hidden lg:flex lg:items-center">
@@ -325,7 +336,7 @@ export default function Page() {
                         aria-hidden="true"
                         className="ml-4 text-sm/6 font-semibold text-gray-900"
                       >
-                        Tom Cook
+                        Tim Cook
                       </span>
                       <ChevronDownIcon
                         aria-hidden="true"
