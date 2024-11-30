@@ -1,21 +1,13 @@
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/react";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { emails } from "@/lib/frontend/data";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import MailModal from "@/components/mail/mail-modal";
+import { Email } from "@/components/webmailer/types";
 
 export default function List() {
-  const [mailModalIsopen, setMailModalIsopen] = useState(false);
+  const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
 
   return (
     <>
@@ -25,19 +17,25 @@ export default function List() {
             <div className="flex min-w-0 gap-x-4">
               <div className="min-w-0 flex-auto">
                 <p className="text-sm/6 font-semibold text-gray-900">
-                  <a href="" className="hover:underline">
+                  <a
+                    onClick={() => setSelectedEmail(email)}
+                    className="hover:underline"
+                  >
                     {email.from}
                   </a>
                 </p>
                 <p className="mt-1 flex text-sm/5 font-medium text-gray-700">
                   <a
-                    onClick={() => setMailModalIsopen(true)}
+                    onClick={() => setSelectedEmail(email)}
                     className="truncate hover:underline"
                   >
                     {email.subject}
                   </a>
                 </p>
-                <p className="mt-1  text-xs/5 text-gray-500 line-clamp-2">
+                <p
+                  onClick={() => setSelectedEmail(email)}
+                  className="mt-1  text-xs/5 text-gray-500 line-clamp-2"
+                >
                   {email.content}
                 </p>
               </div>
@@ -95,73 +93,12 @@ export default function List() {
           </li>
         ))}
       </ul>
-      <MailModal open={mailModalIsopen} setOpen={setMailModalIsopen} />
+      {selectedEmail && (
+        <MailModal
+          email={selectedEmail}
+          setOpen={() => setSelectedEmail(null)}
+        />
+      )}
     </>
-  );
-}
-
-function MailModal({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}) {
-  return (
-    <Dialog onClose={setOpen} open={open} className="relative z-10">
-      <DialogBackdrop
-        transition
-        className="fixed inset-0 bg-gray-500/75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
-      />
-
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-          <DialogPanel
-            transition
-            className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
-          >
-            <div className="">
-              <div className="p-4 border-b">
-                <div className="flex">
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-800 font-bold">
-                      TK
-                    </div>
-                    <div className="ml-4">
-                      <h2 className="text-lg font-semibold">Tim Cook</h2>
-                      <p className="text-sm text-gray-500">test@test.de</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-500 mt-2 ml-auto">
-                    22. November 2024 um 07:08
-                  </p>
-                </div>
-                <h3 className="mt-4 text-sm font-medium text-gray-800">
-                  This is the email subject
-                </h3>
-                <p className="text-sm text-gray-500">
-                  An: Elon Murks &lt;elon.murks@test.de&gt;
-                  {/*Kopie: & 2 weitere*/}
-                </p>
-              </div>
-              <div className="p-4 text-sm text-gray-800">
-                <p>Good Morning Tim,</p>
-                <p className="mt-4">This is a valuable content of an emails</p>
-                <p className="mt-4">
-                  I wish you a pleasent day
-                  <br />
-                  Example
-                </p>
-              </div>
-              <div className="p-4 border-t text-sm text-blue-500">
-                <a onClick={() => setOpen(false)} className="hover:underline">
-                  close
-                </a>
-              </div>
-            </div>
-          </DialogPanel>
-        </div>
-      </div>
-    </Dialog>
   );
 }
