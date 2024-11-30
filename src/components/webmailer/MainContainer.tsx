@@ -7,10 +7,10 @@ import { ActionsRow } from "@/components/webmailer/ActionRow";
 
 import "font-awesome/css/font-awesome.min.css";
 import "./styles.scss";
-import { emails } from "@/components/webmailer/data";
 import { Email } from "@/components/webmailer/types";
 import { Tab } from "@/components/webmailer/Tab";
 import EmailDetail from "@/components/webmailer/EmailDetail";
+import { emails } from "@/lib/frontend/data";
 
 /**
  * Main class which contains the labels and the email list.

@@ -1,6 +1,8 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { emails } from "@/lib/frontend/data";
+// import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 
 export default function List() {
   return (
@@ -14,7 +16,7 @@ export default function List() {
                   {email.from}
                 </a>
               </p>
-              <p className="mt-1 flex text-xs/5 text-gray-500">
+              <p className="mt-1 flex text-sm/5 font-medium text-gray-700">
                 <a
                   href={`mailto:${email.email}`}
                   className="truncate hover:underline"
@@ -22,11 +24,16 @@ export default function List() {
                   {email.subject}
                 </a>
               </p>
+              <p className="mt-1  text-xs/5 text-gray-500 line-clamp-2">
+                {email.content}
+              </p>
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-x-6">
             <div className="hidden sm:flex sm:flex-col sm:items-end">
-              <p className="text-sm/6 text-gray-900">{email.labelId}</p>
+              <p className="text-sm/6 text-gray-900">
+                {dayjs(email.date).format("DD.MM.YYYY HH:mm")}
+              </p>
               {/*{email.lastSeen ? (*/}
               {/*  <p className="mt-1 text-xs/5 text-gray-500">*/}
               {/*    Last seen{" "}*/}
