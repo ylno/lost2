@@ -1,12 +1,15 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
-import { emails } from "@/lib/frontend/data";
 import dayjs from "dayjs";
 import { useState } from "react";
 import MailModal from "@/components/mail/mail-modal";
 import { Email } from "@/components/webmailer/types";
 
-export default function List() {
+interface ListProps {
+  emails: Email[];
+}
+
+export default function List({ emails }: ListProps) {
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
 
   return (

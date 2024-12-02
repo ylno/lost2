@@ -13,6 +13,7 @@ export const emails: Email[] = [
     date: new Date("2024-12-17T03:24:00"),
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 1,
@@ -25,6 +26,7 @@ export const emails: Email[] = [
     time: "22:08",
     date: new Date("2024-12-16T03:24:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 2,
@@ -37,6 +39,7 @@ export const emails: Email[] = [
     time: "19:12",
     date: new Date("2024-12-11T03:24:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 3,
@@ -49,6 +52,7 @@ export const emails: Email[] = [
     time: "18:35",
     date: new Date("2024-12-10T03:24:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 4,
@@ -61,6 +65,7 @@ export const emails: Email[] = [
     subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     time: "14:05",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 5,
@@ -73,6 +78,7 @@ export const emails: Email[] = [
     time: "14:05",
     date: new Date("2024-12-11T01:21:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 6,
@@ -85,6 +91,7 @@ export const emails: Email[] = [
     time: "14:05",
     date: new Date("2024-12-11T01:21:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 7,
@@ -97,6 +104,7 @@ export const emails: Email[] = [
     time: "14:05",
     date: new Date("2024-12-11T01:21:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 8,
@@ -109,6 +117,7 @@ export const emails: Email[] = [
     time: "14:05",
     date: new Date("2024-12-11T01:21:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
   {
     id: 9,
@@ -121,5 +130,6 @@ export const emails: Email[] = [
     time: "14:05",
     date: new Date("2024-12-11T01:21:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    unread: true,
   },
 ];

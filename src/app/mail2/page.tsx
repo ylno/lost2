@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Webmailer from "@/components/mail/webmailer";
+import MailApp from "@/components/mail/mail-app";
 
 export default function Page() {
-  return <Webmailer></Webmailer>;
+  return <MailApp />;
 }

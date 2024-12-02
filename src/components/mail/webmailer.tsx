@@ -26,6 +26,8 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
 import List from "@/components/mail/List";
+import { MailService } from "@/lib/frontend/MailService";
+import { useQuery } from "@tanstack/react-query";
 
 const navigation = [
   { name: "Inbox", href: "#", icon: InboxIcon, current: true, newBadge: 4 },
@@ -52,8 +54,17 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Webmailer() {
+type Props = {
+  mailService: MailService;
+};
+
+export default function Webmailer({ mailService }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const { data: emails, isLoading } = useQuery({
+    queryKey: ["mails"],
+    queryFn: () => mailService.getMails(),
+  });
 
   return (
     <>
@@ -354,7 +365,7 @@ export default function Webmailer() {
 
         <main className="py-10">
           <div className="px-4 sm:px-6 lg:px-8">
-            <List />
+            {emails && <List emails={emails} />}
           </div>
         </main>
       </div>

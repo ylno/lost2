@@ -9,4 +9,5 @@ export type Email = {
   date: Date;
   labelId: number;
   content: string;
+  unread: boolean;
 };
