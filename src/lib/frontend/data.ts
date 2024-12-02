@@ -130,6 +130,6 @@ export const emails: Email[] = [
     time: "14:05",
     date: new Date("2024-12-11T01:21:00"),
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
+    unread: false,
   },
 ];

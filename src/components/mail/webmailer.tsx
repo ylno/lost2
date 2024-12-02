@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -29,7 +29,7 @@ import List from "@/components/mail/List";
 import { MailService } from "@/lib/frontend/MailService";
 import { useQuery } from "@tanstack/react-query";
 
-const navigation = [
+const navigationInput = [
   { name: "Inbox", href: "#", icon: InboxIcon, current: true, newBadge: 4 },
   {
     name: "Sent",
@@ -65,6 +65,18 @@ export default function Webmailer({ mailService }: Props) {
     queryKey: ["mails"],
     queryFn: () => mailService.getMails(),
   });
+
+  const navigation = useMemo(() => {
+    return navigationInput.map((nav) => {
+      if (nav.name === "Inbox") {
+        return {
+          ...nav,
+          newBadge: emails ? emails.filter((email) => email.unread).length : 0,
+        };
+      }
+      return nav;
+    });
+  }, [emails]);
 
   return (
     <>
@@ -140,12 +152,12 @@ export default function Webmailer({ mailService }: Props) {
                       Filters
                     </div>
                     <ul role="list" className="-mx-2 mt-2 space-y-1">
-                      {filters.map((team) => (
-                        <li key={team.name}>
+                      {filters.map((filter) => (
+                        <li key={filter.name}>
                           <a
-                            href={team.href}
+                            href={filter.href}
                             className={classNames(
-                              team.current
+                              filter.current
                                 ? "bg-gray-50 text-indigo-600"
                                 : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
                               "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
@@ -153,15 +165,15 @@ export default function Webmailer({ mailService }: Props) {
                           >
                             <span
                               className={classNames(
-                                team.current
+                                filter.current
                                   ? "border-indigo-600 text-indigo-600"
                                   : "border-gray-200 text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600",
                                 "flex size-6 shrink-0 items-center justify-center rounded-lg border bg-white text-[0.625rem] font-medium",
                               )}
                             >
-                              {team.initial}
+                              {filter.initial}
                             </span>
-                            <span className="truncate">{team.name}</span>
+                            <span className="truncate">{filter.name}</span>
                           </a>
                         </li>
                       ))}
