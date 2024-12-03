@@ -18,7 +18,7 @@ export default function List({ emails }: ListProps) {
         {emails.map((email) => (
           <li key={email.id} className="flex justify-between gap-x-6 py-5">
             <div
-              className={`flex-shrink-0 w-2 h-2 ${email.unread && "bg-blue-500"} rounded-full mt-2}`}
+              className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${email.unread && "bg-blue-500"}`}
             ></div>
             <div className="flex-auto min-w-0 gap-x-4">
               <div className="min-w-0 flex-auto">
