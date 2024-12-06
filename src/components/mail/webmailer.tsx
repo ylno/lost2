@@ -30,7 +30,7 @@ import { MailService } from "@/lib/frontend/MailService";
 import { useQuery } from "@tanstack/react-query";
 
 const navigationInput = [
-  { name: "Inbox", href: "#", icon: InboxIcon, current: true, newBadge: 4 },
+  { name: "Inbox", href: "#", icon: InboxIcon, current: true, newBadge: 0 },
   {
     name: "Sent",
     href: "#",
@@ -291,7 +291,7 @@ export default function Webmailer({ mailService }: Props) {
       </div>
 
       <div className="lg:pl-72">
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
@@ -374,9 +374,8 @@ export default function Webmailer({ mailService }: Props) {
             </div>
           </div>
         </div>
-
-        <main className="py-10">
-          <div className="px-4 sm:px-6 lg:px-8">
+        <main className="py-2">
+          <div className="px-4 sm:px-6 lg:px-5">
             {emails && <List emails={emails} />}
           </div>
         </main>

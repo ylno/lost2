@@ -3,7 +3,7 @@ import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import dayjs from "dayjs";
 import { useState } from "react";
 import MailModal from "@/components/mail/mail-modal";
-import { Email } from "@/components/webmailer/types";
+import { Email } from "@/components/mail/types";
 
 interface ListProps {
   emails: Email[];
@@ -14,9 +14,9 @@ export default function List({ emails }: ListProps) {
 
   return (
     <>
-      <ul role="list" className="divide-y divide-gray-100">
+      <ul role="list" className="divide-y divide-gray-200">
         {emails.map((email) => (
-          <li key={email.id} className="flex justify-between gap-x-6 py-5">
+          <li key={email.id} className="flex justify-between gap-x-2 py-2">
             <div
               className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${email.unread && "bg-blue-500"}`}
             ></div>
