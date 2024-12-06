@@ -48,6 +48,10 @@ function generateTestData(
   return testData;
 }
 
+export function generateEMails() {
+  return generateTestData(40).sort((a, b) => (a.date > b.date ? -1 : 1));
+}
+
 export const emails = generateTestData(40).sort((a, b) =>
   a.date > b.date ? -1 : 1,
 );

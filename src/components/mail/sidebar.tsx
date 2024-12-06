@@ -19,6 +19,8 @@ type Props = {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
   emails: Email[];
+  activeFolder: string;
+  setActiveFolder: (activeFolder: string) => void;
 };
 
 function classNames(...classes: string[]) {
@@ -46,6 +48,8 @@ export default function Sidebar({
   sidebarOpen,
   setSidebarOpen,
   emails,
+  activeFolder,
+  setActiveFolder,
 }: Props) {
   const navigation = useMemo(() => {
     return navigationInput.map((nav) => {
@@ -105,9 +109,9 @@ export default function Sidebar({
                       {navigation.map((item) => (
                         <li key={item.name}>
                           <a
-                            href={item.href}
+                            onClick={() => setActiveFolder(item.name)}
                             className={classNames(
-                              item.current
+                              item.name == activeFolder
                                 ? "bg-gray-50 text-indigo-600"
                                 : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
                               "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
@@ -116,7 +120,7 @@ export default function Sidebar({
                             <item.icon
                               aria-hidden="true"
                               className={classNames(
-                                item.current
+                                item.name == activeFolder
                                   ? "text-indigo-600"
                                   : "text-gray-400 group-hover:text-indigo-600",
                                 "size-6 shrink-0",
@@ -194,9 +198,9 @@ export default function Sidebar({
                   {navigation.map((item) => (
                     <li key={item.name}>
                       <a
-                        href={item.href}
+                        onClick={() => setActiveFolder(item.name)}
                         className={classNames(
-                          item.current
+                          item.name == activeFolder
                             ? "bg-gray-50 text-indigo-600"
                             : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
                           "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
@@ -205,7 +209,7 @@ export default function Sidebar({
                         <item.icon
                           aria-hidden="true"
                           className={classNames(
-                            item.current
+                            item.name == activeFolder
                               ? "text-indigo-600"
                               : "text-gray-400 group-hover:text-indigo-600",
                             "size-6 shrink-0",
@@ -232,7 +236,7 @@ export default function Sidebar({
                       <a
                         href={team.href}
                         className={classNames(
-                          team.current
+                          team.name == activeFolder
                             ? "bg-gray-50 text-indigo-600"
                             : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
                           "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
@@ -240,7 +244,7 @@ export default function Sidebar({
                       >
                         <span
                           className={classNames(
-                            team.current
+                            team.name == activeFolder
                               ? "border-indigo-600 text-indigo-600"
                               : "border-gray-200 text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600",
                             "flex size-6 shrink-0 items-center justify-center rounded-lg border bg-white text-[0.625rem] font-medium",

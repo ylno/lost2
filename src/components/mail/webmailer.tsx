@@ -1,39 +1,11 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  TransitionChild,
-} from "@headlessui/react";
-import {
-  Bars3Icon,
-  BellIcon,
-  Cog6ToothIcon,
-  DocumentIcon,
-  InboxIcon,
-  PaperAirplaneIcon,
-  TrashIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/20/solid";
+import React, { useState } from "react";
 import List from "@/components/mail/List";
 import { MailService } from "@/lib/frontend/MailService";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/mail/Header";
 import Sidebar from "@/components/mail/sidebar";
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
 
 type Props = {
   mailService: MailService;
@@ -43,9 +15,13 @@ export default function Webmailer({ mailService }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeFolder, setActiveFolder] = useState("Inbox");
 
-  const { data: emails, isLoading } = useQuery({
-    queryKey: ["mails"],
-    queryFn: () => mailService.getMails(),
+  const {
+    data: emails,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["mails", activeFolder],
+    queryFn: () => mailService.getMailsByFolder(activeFolder),
   });
 
   return (
@@ -53,6 +29,8 @@ export default function Webmailer({ mailService }: Props) {
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
+        setActiveFolder={setActiveFolder}
+        activeFolder={activeFolder}
         emails={emails || []}
       />
       <div className="lg:pl-72">

@@ -1,7 +1,7 @@
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
-import { Email } from "@/components/webmailer/types";
 import dayjs from "dayjs";
 import { getInitials } from "@/lib/frontend/service";
+import { Email } from "@/lib/frontend/types";
 
 type Props = {
   setOpen: (open: boolean) => void;
