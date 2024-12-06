@@ -1,115 +1,53 @@
 import { Email } from "@/lib/frontend/types";
+function generateTestData(
+  count: number,
+  to: string = "Tim Cook",
+  to_email: string = "tim@dosenmatrosen.de",
+): Email[] {
+  const names = [
+    "Mike James",
+    "Anna Smith",
+    "John Doe",
+    "Jane Miller",
+    "Tom Hanks",
+  ];
+  const emails = [
+    "test@test.de",
+    "user1@example.com",
+    "user2@example.com",
+    "test2@test.de",
+  ];
+  const subjects = [
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "Praesent commodo cursus magna, vel scelerisque nisl consectetur.",
+    "Curabitur blandit tempus porttitor.",
+    "Aenean lacinia bibendum nulla sed consectetur.",
+    "Nulla vitae elit libero, a pharetra augue.",
+  ];
+  const lorem =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(5);
 
-export const emails: Email[] = [
-  {
-    id: 0,
-    from: "Mike James",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-17T03:24:00"),
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 1,
-    from: "Emma Thompson",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-16T03:24:00"),
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 2,
-    from: "Olivia Jefferson",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-11T03:24:00"),
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 3,
-    from: "Mike Conley",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-10T03:24:00"),
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 4,
-    from: "Emily Iverson",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    date: new Date("2024-12-09T03:24:00"),
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 5,
-    from: "Michael Neal",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-11T01:21:00"),
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 6,
-    from: "Michael Neal",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-11T01:21:00"),
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 7,
-    from: "Michael Neal",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-11T01:21:00"),
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 8,
-    from: "Michael Neal",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-11T01:21:00"),
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: true,
-  },
-  {
-    id: 9,
-    from: "Michael Neal",
-    from_email: "test@test.de",
-    to: "Tim Cook",
-    to_email: "tim@dosenmatrosen.de",
-    subject: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    date: new Date("2024-12-11T01:21:00"),
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    unread: false,
-  },
-];
+  const testData: Email[] = [];
+
+  for (let i = 0; i < count; i++) {
+    testData.push({
+      id: i,
+      from: names[Math.floor(Math.random() * names.length)],
+      from_email: emails[Math.floor(Math.random() * emails.length)],
+      to,
+      to_email,
+      subject: subjects[Math.floor(Math.random() * subjects.length)],
+      date: new Date(
+        Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 365),
+      ), // Zufälliges Datum im letzten Jahr
+      content: lorem,
+      unread: Math.random() > 0.5,
+    });
+  }
+
+  return testData;
+}
+
+export const emails = generateTestData(40).sort((a, b) =>
+  a.date > b.date ? -1 : 1,
+);
