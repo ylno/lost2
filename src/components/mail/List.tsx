@@ -3,7 +3,7 @@ import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import dayjs from "dayjs";
 import { useState } from "react";
 import MailModal from "@/components/mail/mail-modal";
-import { Email } from "@/components/mail/types";
+import { Email } from "@/lib/frontend/types";
 
 interface ListProps {
   emails: Email[];

@@ -5,9 +5,7 @@ export type Email = {
   to: string;
   to_email: string;
   subject: string;
-  time: string;
   date: Date;
-  labelId: number;
   content: string;
   unread: boolean;
 };
