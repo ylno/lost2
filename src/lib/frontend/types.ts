@@ -1,5 +1,5 @@
 export type Email = {
-  id: number;
+  id: string;
   from: string;
   from_email: string;
   to: string;

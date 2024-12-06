@@ -31,7 +31,7 @@ function generateTestData(
 
   for (let i = 0; i < count; i++) {
     testData.push({
-      id: i,
+      id: crypto.randomUUID(),
       from: names[Math.floor(Math.random() * names.length)],
       from_email: emails[Math.floor(Math.random() * emails.length)],
       to,
