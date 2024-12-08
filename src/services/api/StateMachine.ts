@@ -1,6 +1,17 @@
 import { assign, createMachine } from "xstate";
 import { StateMachineDefinition } from "@/services/api/StageLogic";
 
+type StateDefinition = {
+  [key: string]: {
+    on: {
+      CORRECT_ANSWER: { target: string; actions: any };
+      WRONG_ANSWER: { actions: any };
+      HELP: { actions: any };
+    };
+    meta: { helpLevel: number };
+  };
+};
+
 const states = StateMachineDefinition.reduce((acc, state) => {
   acc[state.state] = {
     on: {
@@ -38,7 +49,7 @@ const states = StateMachineDefinition.reduce((acc, state) => {
     },
   };
   return acc;
-}, {} as any);
+}, {} as StateDefinition);
 
 export const stateMachine = createMachine({
   id: "chat",

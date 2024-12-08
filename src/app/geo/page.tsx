@@ -20,7 +20,7 @@ export default function GeoLocation() {
       );
       setInterval(() => {}, 1000);
     } else {
-      console.log("Geolocation ist nicht verfügbar");
+      console.log("Geolocation is not available");
     }
   }, []);
 

@@ -1,7 +1,9 @@
 import "./chat.scss";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Conversation } from "@/types/types";
 import { FaRegPaperPlane, FaLocationDot, FaCamera } from "react-icons/fa6";
+import { Spinner } from "@/components/spinner";
+import { geoService } from "@/lib/frontend/GeoService";
 
 type ChatParameter = {
   sendChatMessage: (message: string) => Promise<void>;
@@ -12,8 +14,9 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
   const [message, setMessage] = useState("");
   const [firstDate, setFirstDate] = useState<Date | null>();
   const chatAreaRef = useRef<HTMLDivElement>(null);
-  const [sending, setSending] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [sending, setSending] = useState(false);
+  const [loadingLocation, setLoadingLocation] = useState(false);
 
   async function submitForm(e: FormEvent) {
     console.log("formevent", e);
@@ -41,6 +44,22 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
     // Fokusieren des Input-Elements, wenn die Komponente geladen wird
     inputRef.current?.focus();
   }, []);
+
+  async function getLocation(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) {
+    event.preventDefault();
+    console.log("event", event);
+    setLoadingLocation(true);
+    try {
+      const position = await geoService.getLocation();
+      setMessage(`${position.coords.latitude} ${position.coords.longitude}`);
+    } catch (e) {
+      // todo show error
+    } finally {
+      setLoadingLocation(false);
+    }
+  }
 
   return (
     <div className="center">
@@ -80,8 +99,8 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
             <button className={"form-item image"}>
               <FaCamera />
             </button>
-            <button className={"form-item location"}>
-              <FaLocationDot />
+            <button className={"form-item location"} onClick={getLocation}>
+              {!loadingLocation ? <FaLocationDot /> : <Spinner />}
             </button>
             <input
               ref={inputRef}
@@ -93,7 +112,7 @@ export function Chat({ sendChatMessage, conversation }: ChatParameter) {
               onChange={(e) => setMessage(e.target.value)}
             />
             <button className={"form-item send"} disabled={sending}>
-              <FaRegPaperPlane />
+              {!sending ? <FaRegPaperPlane /> : <Spinner />}
             </button>
           </form>
         </div>

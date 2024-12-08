@@ -98,6 +98,7 @@ export default function Home() {
             className="msg-input"
             onChange={(e) => setCode(e.target.value)}
             disabled={submitting}
+            placeholder="Enter code here..."
           />
           <button className={"form-item send"} disabled={submitting}>
             {!submitting ? <FaRegPaperPlane /> : <Spinner />}

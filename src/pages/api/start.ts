@@ -15,7 +15,7 @@ export default async function handler(
 
   console.log("server function, submitted code:", code);
 
-  if (START_CODE && code === START_CODE) {
+  if (START_CODE && code.toLowerCase() === START_CODE) {
     const cacheSession = await apiService.startSession();
     console.log("cacheSession created", cacheSession);
     return res.status(200).json(cacheSession);
