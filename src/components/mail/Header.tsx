@@ -5,10 +5,11 @@ import {
 } from "@heroicons/react/20/solid";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import React from "react";
+import { useSession, signOut } from "next-auth/react";
 
 const userNavigation = [
-  { name: "Your profile", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Your profile", href: "#", action: () => {} },
+  { name: "Sign out", href: "#", action: signOut },
 ];
 
 type Props = {
@@ -88,7 +89,7 @@ export default function Header({ setSidebarOpen }: Props) {
               {userNavigation.map((item) => (
                 <MenuItem key={item.name}>
                   <a
-                    href={item.href}
+                    onClick={() => item.action()}
                     className="block px-3 py-1 text-sm/6 text-gray-900 data-[focus]:bg-gray-50 data-[focus]:outline-none"
                   >
                     {item.name}
